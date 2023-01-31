@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Step watcher</h1>
+
+    <div class="dashboard">
+        <div>
+            <h2>Create a new session</h2>
+
+            {{ form(form) }}
+        </div>
+
+        <div>
+            <h2>Select an existing session</h2>
+
+            {% for session in sessions %}
+                <p><a href="{{ path('session_show', {sessionName: session.name}) }}">{{ session.name }}</a></p>
+            {% endfor %}
+        </div>
+    </div>   
+{% endblock %}
