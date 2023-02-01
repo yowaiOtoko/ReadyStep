@@ -12,11 +12,14 @@
     <div>
         <h2>{{ user.name }}</h2>
 
+{{ dump(currentUserTasksCompletion) }}
+
         <table>
             <thead>
                 <tr>
                     <th>Task</th>
-                    <th>Valid</th>
+                    <th>Status</th>
+                    <th>Operations</th>
                 </tr>
             </thead>
             <tbody>
@@ -24,7 +27,11 @@
                     <tr>
                         <td>{{ task.description }}</td>
 
-                        <td>X</td>
+                        {% for userTask in userTasks %}
+                            {% if userTask.user.id == user.id and userTask.task.id == task.id %}
+                                <td>V</td>
+                            {% endif %}
+                        {% endfor %}
                     </tr>
                 {% endfor %}
             </tbody>

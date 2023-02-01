@@ -15,10 +15,10 @@ class UserTask
     #[ORM\Column(name: 'completed', type: 'boolean', nullable: false)]
     private ?bool $completed = true;
 
-    #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
+    #[ORM\Column(name: 'created_at', type: 'datetime_immutable', nullable: false)]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(name: 'completed_at', type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'completed_at', type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $completedAt = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'userTasks')]
@@ -28,6 +28,10 @@ class UserTask
     #[ORM\ManyToOne(targetEntity: Task::class, inversedBy: 'userTasks')]
     #[ORM\JoinColumn(name: 'task_id', referencedColumnName: 'id')]
     private ?Task $task = null;
+
+    #[ORM\ManyToOne(inversedBy: 'userTasks', targetEntity: Session::class)]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id')]
+    private ?Session $session = null;
 
     public function __construct()
     {
@@ -71,6 +75,42 @@ class UserTask
     public function setCompletedAt(?\DateTimeImmutable $completedAt): self
     {
         $this->completedAt = $completedAt;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getTask(): ?Task
+    {
+        return $this->task;
+    }
+
+    public function setTask(?Task $task): self
+    {
+        $this->task = $task;
+
+        return $this;
+    }
+
+    public function getSession(): ?Session
+    {
+        return $this->session;
+    }
+
+    public function setSession(?Session $session): self
+    {
+        $this->session = $session;
 
         return $this;
     }

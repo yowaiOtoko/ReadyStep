@@ -17,6 +17,9 @@ class Task
     #[ORM\Column(name: 'description', type: 'text', nullable: false)]
     private ?string $description = null;
 
+    #[ORM\Column(name: 'created_at', type: 'datetime_immutable', nullable: false)]
+    private ?\DateTimeImmutable $createdAt = null;
+
     #[ORM\ManyToOne(targetEntity: Session::class, inversedBy: 'tasks')]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id')]
     private ?Session $session = null;
@@ -42,6 +45,18 @@ class Task
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

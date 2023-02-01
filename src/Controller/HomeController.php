@@ -30,7 +30,7 @@ class HomeController extends AbstractController
             $entityManager->flush();
 
             return $this->redirectToRoute('session_show', [
-                'name' => $session->getName()
+                'sessionName' => $session->getName()
             ]);
         }
 

@@ -40,8 +40,9 @@ class SessionController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('session_show', [
-                'sessionName' => $session->getName()
+            return $this->redirectToRoute('session_index', [
+                'sessionName' => $session->getName(),
+                'userName' => $user->getName()
             ]);
         }
 
@@ -57,8 +58,6 @@ class SessionController extends AbstractController
     {
         $entityManager = $doctrine->getManager();
 
-        $userTasks = $doctrine->getRepository(UserTask::class)->findAll();
-
         $user = $doctrine->getRepository(User::class)->findOneBy([
             'name' => $userName
         ]);
@@ -67,11 +66,17 @@ class SessionController extends AbstractController
             'name' => $sessionName
         ]);
 
+        $userTasks = $doctrine->getRepository(UserTask::class)->findBy([
+            'session' => $session
+        ]);
+
         $users = $doctrine->getRepository(User::class)->findBy([
             'session' => $session->getId()
         ]);
 
-        $tasks = $doctrine->getRepository(Task::class)->findAll();
+        $tasks = $doctrine->getRepository(Task::class)->findBy([
+            'session' => $session->getId()
+        ]);
 
         $task = new Task;
         $taskForm = $this->createForm(TaskType::class, $task);
@@ -80,6 +85,7 @@ class SessionController extends AbstractController
         if ($taskForm->isSubmitted() && $taskForm->isValid()) {
             $task = $taskForm->getData();
             $task->setSession($session);
+            $task->setCreatedAt(new \DateTimeImmutable);
 
             $entityManager->persist($task);
             $entityManager->flush();
@@ -92,13 +98,36 @@ class SessionController extends AbstractController
 
 dump($userTasks);
 
+        $tasksCompletion = [];
+
+        foreach ($users as $objectUser) {
+            foreach ($tasks as $taskKey => $task) {
+                $tasksCompletion[$objectUser->getName()][] = [
+                    'taskDescription' => $task->getDescription(),
+                    'status' => false
+                ];
+
+                foreach ($userTasks as $key => $userTask) {
+                    if (
+                        $objectUser->getId() == $userTask->getUser()->getId() &&
+                        $task->getId() == $userTask->getTask()->getId()
+                    ) {
+                        $tasksCompletion[$objectUser->getName()][$taskKey]['status'] = true;
+                    }
+                }
+            }
+        }
+
         return $this->render('session/index.html.twig', [
             'session' => $session,
             'user' => $user,
             'users' => $users,
             'taskForm' => $taskForm,
             'tasks' => $tasks,
-            'userTasks' => $userTasks
+            'userTasks' => $userTasks,
+
+            'currentUserTasksCompletion' => $tasksCompletion[$user->getName()],
+            'tasksCompletion' => $tasksCompletion
         ]);
     }
 }
