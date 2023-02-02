@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div>
+        <a href="{{ path('session_index', { sessionName: session.name, userName: user.name }) }}">Return</a> 
+    </div>
+
+    <h1>Session : {{ session.name }}</h1>
+
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Created at</th>
+                    <th>Operations</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sessionTask in sessionTasks %}
+                    <tr>
+                        <td>{{ sessionTask.description }}</td>
+                        <td>{{ sessionTask.createdAt|date('d/m/Y') }}</td>
+                        <td><a href="">Delete</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div> 
+{% endblock %}

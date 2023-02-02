@@ -2,7 +2,7 @@
 .other-participants {
     display: flex;
     justify-content: space-around;
-    align-iems: center;
+    align-items: center;
     flex-wrap: wrap;
 }
 

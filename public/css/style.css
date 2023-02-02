@@ -1,0 +1,96 @@
+
+:root {
+    font-family: sans-serif;
+    --fieldRadius: 4px;
+    --fieldBorder: 1px solid silver;
+}
+
+nav {
+    padding: 20px;
+    border: 1px solid silver;
+}
+
+nav a {
+    color: orange;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: red;
+}
+
+
+.global-dashboard {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.global-dashboard > div {
+    width: 100%;
+    border: 1px solid silver;
+    height: 100%;
+    margin: 4px 0px;
+    padding: 10px 14px;
+}
+
+
+h1[class="main-title"] {
+    text-align: center;
+}
+
+h2[class="second-title"] {
+    text-align: center;
+    font-weight: normal;
+}
+
+.basic-link {
+    color: orange;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.basic-link:hover {
+    color: red;
+}
+
+.global-form > div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;  
+    width: 100%;
+    margin: 6px 0px;
+}
+
+.global-form > div > div {
+}
+
+.global-form label {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 6px;
+    box-sizing: border-box;
+}
+
+.global-form input[type="text"] {
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 300px;
+    padding: 4px 8px;
+    font-size: 1em;
+    border-radius: var(--fieldRadius);
+    border: var(--fieldBorder);
+}
+
+.global-form button[type="submit"] {
+    font-size: 1em;
+    padding: 4px 20px;
+    background: white;
+    border-radius: var(--fieldRadius);
+    border: var(--fieldBorder);
+}
+

@@ -13,9 +13,9 @@ class SessionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('name', TextType::class, [
-                    'label' => 'Session\'s name'
+            'label' => 'Nom de la session'
                 ])
-                ->add('create', SubmitType::class);
+                ->add('submit', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -1,21 +1,36 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}" />
+{% endblock %}
+
 {% block body %}
-    <h1>Step watcher</h1>
+    <h1 class="main-title">Step watcher</h1>
 
-    <div class="dashboard">
+    <div class="global-dashboard">
         <div>
-            <h2>Create a new session</h2>
+            <h2 class="second-title">Créer une session</h2>
 
-            {{ form(form) }}
+            {{ form_start(form, { 'attr': {'class': 'global-form'} }) }}
+                <div>
+                    <div>{{ form_label(form.name) }}</div>
+                    <div>{{ form_widget(form.name) }}</div>
+                </div>
+                <div>
+                    <div></div>
+                    <div>{{ form_widget(form.submit) }}</div>
+                </div>
+            {{ form_end(form) }}
         </div>
 
         <div>
-            <h2>Select an existing session</h2>
+            <h2 class="second-title">Selectionner une session existante</h2>
 
-            {% for session in sessions %}
-                <p><a href="{{ path('session_show', {sessionName: session.name}) }}">{{ session.name }}</a></p>
-            {% endfor %}
+            <div class="sessions">
+                {% for session in sessions %}
+                    <p><a class="basic-link" href="{{ path('session_show', {sessionName: session.name}) }}">{{ session.name }}</a></p>
+                {% endfor %}
+            </div>
         </div>
     </div>   
 {% endblock %}

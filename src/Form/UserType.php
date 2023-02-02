@@ -15,7 +15,7 @@ class UserType extends AbstractType
         $builder->add('name', TextType::class, [
                     'label' => 'Enter a pseudo'
                 ])
-                ->add('Enter', SubmitType::class);
+                ->add('submit', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

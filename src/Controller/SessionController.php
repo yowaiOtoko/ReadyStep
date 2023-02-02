@@ -53,6 +53,26 @@ class SessionController extends AbstractController
         ]);
     }
 
+    #[Route('/{sessionId}/tasks/{userName}', name: 'tasks')]
+    public function sessionTasks(ManagerRegistry $doctrine, int $sessionId, string $userName)
+    {
+        $session = $doctrine->getRepository(Session::class)->findOneBy(['id' => $sessionId]);
+
+        $sessionTasks = $doctrine->getRepository(Task::class)->findBy([
+            'session' => $session
+        ]);
+
+        $user = $doctrine->getRepository(User::class)->findOneBy([
+            'name' => $userName
+        ]);
+
+        return $this->render('session/session_tasks.html.twig', [
+            'session' => $session,
+            'sessionTasks' => $sessionTasks,
+            'user' => $user
+        ]);
+    }
+
     #[Route('/{sessionName}/{userName}', name: 'index')]
     public function index(ManagerRegistry $doctrine, Request $request, string $sessionName, string $userName): Response
     {
@@ -98,8 +118,6 @@ class SessionController extends AbstractController
 
         $tasksCompletion = [];
 
-dump($userTasks);
-
         foreach ($users as $objectUser) {
             foreach ($tasks as $taskKey => $task) {
                 $tasksCompletion[$objectUser->getName()][] = [
@@ -122,8 +140,6 @@ dump($userTasks);
         }
 
         $currentUserTasksCompletion = empty($tasksCompletion) ? '' : $tasksCompletion[$user->getName()];
-
-dump($currentUserTasksCompletion);
 
         return $this->render('session/index.html.twig', [
             'session' => $session,

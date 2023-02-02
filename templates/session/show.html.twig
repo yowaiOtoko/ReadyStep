@@ -1,20 +1,31 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Session : {{ session.name }}</h1>
+    <h1 class="main-title">Session : {{ session.name }}</h1>
 
-    <div class="dashboard">
+    <div class="global-dashboard">
         <div>
-            <h2>Add a new user in the session</h2>
+            <h2 class="second-title">Add a new user in the session</h2>
 
-            {{ form(form) }}    
+            {{ form_start(form, { 'attr': {'class': 'global-form'} }) }}
+                <div>
+                    <div>{{ form_label(form.name) }}</div>
+                    <div>{{ form_widget(form.name) }}</div>
+                </div>
+                <div>
+                    <div></div>
+                    <div>{{ form_widget(form.submit) }}</div>
+                </div>
+            {{ form_end(form) }}
         </div>
         <div>
-            <h2>Select an already existing pseudo</h2>
+            <h2 class="second-title">Select an already existing pseudo</h2>
 
-            {% for user in users %}
-                <p><a href="{{ path('session_index', {sessionName: session.name, userName: user.name}) }}">{{ user.name }}</a></p>
-            {% endfor %}
+            <div class="users">
+                {% for user in users %}
+                    <p><a class="basic-link" href="{{ path('session_index', {sessionName: session.name, userName: user.name}) }}">{{ user.name }}</a></p>
+                {% endfor %}
+            </div>
         </div>
     </div>
 {% endblock %}

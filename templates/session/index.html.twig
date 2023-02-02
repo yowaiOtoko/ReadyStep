@@ -1,11 +1,16 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/session.css') }}" />
+{% endblock %}
+
 {% block body %}
     <h1>Session : {{ session.name }}</h1> 
 
     <div class="nav-session">
         <ul>
             <li><a href="{{ path('session_show', { sessionName: session.name }) }}">Return</a></li>
+            <li><a href="{{ path('session_tasks', { sessionId: session.id, userName: user.name }) }}">Tasks of the session</a></li>
         </ul>
     </div>
 
