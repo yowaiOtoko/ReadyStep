@@ -7,8 +7,14 @@
 }
 
 .other-participants .participant {
-    border: 1px solid silver;
     margin: 10px;
     padding: 6px;
 }
 
+.checked {
+    color: #4F9F4F;
+}
+
+.unchecked {
+    color: red;
+}

@@ -3,6 +3,12 @@
 {% block body %}
     <h1>Session : {{ session.name }}</h1> 
 
+    <div class="nav-session">
+        <ul>
+            <li><a href="{{ path('session_show', { sessionName: session.name }) }}">Return</a></li>
+        </ul>
+    </div>
+
     <div>
         <h2>Add a new task</h2>
 
@@ -25,11 +31,11 @@
                     <tr>
                         <td>{{ currentUserTask.taskDescription }}</td>
                         {% if currentUserTask.status %}
-                            <td>V</td>
-                            <td><a href="">Uncheck</a></td>
+                            <td class="checked">V</td>
+                            <td><a href="{{ path('task_uncheck', { userTaskId: currentUserTask.userTaskId }) }}">Uncheck</a></td>
                         {% else %}
-                            <td>X</td>
-                            <td><a href="{{ path('task_check', { sessionId: session.id, taskId: currentUserTask.taskId, userId: user.id }) }}">Check</a></td>
+                            <td class="unchecked">X</td>
+                            <td><a href="{{ path('task_check', { userTaskId: currentUserTask.userTaskId, sessionId: session.id, taskId: currentUserTask.taskId, userId: user.id }) }}">Check</a></td>
                         {% endif %}
                     </tr>
                 {% endfor %}
@@ -41,27 +47,33 @@
         <h2>Other participants</h2>
 
         <div class="other-participants">
-            {% for user in users %}
-                <div class="participant">
-                    <h3>{{ user.name }}</h3>
+            {% for participant, taskCompletion in tasksCompletion %}
+                {% if user.name != participant %}
+                    <div class="participant">
+                        <h3>{{ participant }}</h3>
 
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Task</th>
-                                <th>Valid</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for task in tasks %}
+                        <table>
+                            <thead>
                                 <tr>
-                                    <td>{{ task.description }}</td>
-                                    <td>X</td>
+                                    <th>Task</th>
+                                    <th>Status</th>
                                 </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
+                            <tbody>
+                                {% for data in taskCompletion %}
+                                    <tr>
+                                        <td>{{ data.taskDescription }}</td>
+                                        {% if data.status %}
+                                            <td class="checked">V</td>
+                                        {% else %}
+                                            <td class="unchecked">X</td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
             {% endfor %}
         </div>
     </div>

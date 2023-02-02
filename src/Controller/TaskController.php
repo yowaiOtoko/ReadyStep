@@ -13,31 +13,46 @@ use App\Entity\Session;
 #[Route('/task', name: 'task_')]
 class TaskController extends AbstractController
 {
-    #[Route('/check/{sessionId}/{taskId}/{userId}', name: 'check')]
-    public function checkTask(int $taskId, int $userId, int $sessionId, ManagerRegistry $doctrine)
+    #[Route('/check/{sessionId}/{taskId}/{userId}/{userTaskId}', name: 'check')]
+    public function checkTask(ManagerRegistry $doctrine, int $taskId, int $userId, int $sessionId, $userTaskId)
     {
-        $entityManager = $doctrine->getManager();
-        $userTask = new UserTask;
-
-        $task = $doctrine->getRepository(Task::class)->findOneBy([
-            'id' => $taskId
-        ]);
-        $user = $doctrine->getRepository(User::class)->findOneBy([
-            'id' => $userId
-        ]);
         $session = $doctrine->getRepository(Session::class)->findOneBy([
             'id' => $sessionId
         ]);
 
-        $userTask->setCompleted(true);
-        $userTask->setCreatedAt($task->getCreatedAt());
-        $userTask->setCompletedAt(new \DateTimeImmutable);
-        $userTask->setUser($user);
-        $userTask->setTask($task);
-        $userTask->setSession($session);
+        $user = $doctrine->getRepository(User::class)->findOneBy([
+            'id' => $userId
+        ]);
 
-        $entityManager->persist($userTask);
-        $entityManager->flush();
+        if (!empty($userTaskId)) {
+            $entityManager = $doctrine->getManager();
+
+            $userTask = $doctrine->getRepository(UserTask::class)->findOneBy([
+                'id' => $userTaskId
+            ]);
+
+            $userTask->setCompleted(true);
+
+            $entityManager->persist($userTask);
+            $entityManager->flush();   
+        } else {
+            $entityManager = $doctrine->getManager();
+            $userTask = new UserTask;
+
+            $task = $doctrine->getRepository(Task::class)->findOneBy([
+                'id' => $taskId
+            ]);
+
+            $userTask->setCompleted(true);
+            $userTask->setCreatedAt($task->getCreatedAt());
+            $userTask->setCompletedAt(new \DateTimeImmutable);
+            $userTask->setUser($user);
+            $userTask->setTask($task);
+            $userTask->setSession($session);
+
+            $entityManager->persist($userTask);
+            $entityManager->flush();
+        }
 
         return $this->redirectToRoute('session_index', [
             'sessionName' => $session->getName(),
@@ -45,8 +60,23 @@ class TaskController extends AbstractController
         ]);
     }
 
-    public function unCheckTask()
+    #[Route('/uncheck/{userTaskId}', name: 'uncheck')]
+    public function uncheckTask(ManagerRegistry $doctrine, int $userTaskId)
     {
+        $entityManager = $doctrine->getManager();
 
+        $userTask = $doctrine->getRepository(UserTask::class)->findOneBy([
+            'id' => $userTaskId
+        ]);
+
+        $userTask->setCompleted(false);
+
+        $entityManager->persist($userTask);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('session_index', [
+            'sessionName' => $userTask->getSession()->getName(),
+            'userName' => $userTask->getUser()->getName(),
+        ]);
     }
 }

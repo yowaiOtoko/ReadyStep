@@ -98,9 +98,12 @@ class SessionController extends AbstractController
 
         $tasksCompletion = [];
 
+dump($userTasks);
+
         foreach ($users as $objectUser) {
             foreach ($tasks as $taskKey => $task) {
                 $tasksCompletion[$objectUser->getName()][] = [
+                    'userTaskId' => 0,
                     'taskId' => $task->getId(),
                     'taskDescription' => $task->getDescription(),
                     'status' => false
@@ -111,7 +114,8 @@ class SessionController extends AbstractController
                         $objectUser->getId() == $userTask->getUser()->getId() &&
                         $task->getId() == $userTask->getTask()->getId()
                     ) {
-                        $tasksCompletion[$objectUser->getName()][$taskKey]['status'] = true;
+                        $tasksCompletion[$objectUser->getName()][$taskKey]['status'] = $userTask->getCompleted();
+                        $tasksCompletion[$objectUser->getName()][$taskKey]['userTaskId'] = $userTask->getId();
                     }
                 }
             }
@@ -120,7 +124,6 @@ class SessionController extends AbstractController
         $currentUserTasksCompletion = empty($tasksCompletion) ? '' : $tasksCompletion[$user->getName()];
 
 dump($currentUserTasksCompletion);
-dump($tasksCompletion);
 
         return $this->render('session/index.html.twig', [
             'session' => $session,
