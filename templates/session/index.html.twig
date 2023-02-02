@@ -12,8 +12,6 @@
     <div>
         <h2>{{ user.name }}</h2>
 
-{{ dump(currentUserTasksCompletion) }}
-
         <table>
             <thead>
                 <tr>
@@ -23,15 +21,16 @@
                 </tr>
             </thead>
             <tbody>
-                {% for task in tasks %}
+                {% for currentUserTask in currentUserTasksCompletion %}
                     <tr>
-                        <td>{{ task.description }}</td>
-
-                        {% for userTask in userTasks %}
-                            {% if userTask.user.id == user.id and userTask.task.id == task.id %}
-                                <td>V</td>
-                            {% endif %}
-                        {% endfor %}
+                        <td>{{ currentUserTask.taskDescription }}</td>
+                        {% if currentUserTask.status %}
+                            <td>V</td>
+                            <td><a href="">Uncheck</a></td>
+                        {% else %}
+                            <td>X</td>
+                            <td><a href="{{ path('task_check', { sessionId: session.id, taskId: currentUserTask.taskId, userId: user.id }) }}">Check</a></td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>
@@ -41,27 +40,29 @@
     <div>
         <h2>Other participants</h2>
 
-        {% for user in users %}
-            <div>
-                <h3>{{ user.name }}</h3>
+        <div class="other-participants">
+            {% for user in users %}
+                <div class="participant">
+                    <h3>{{ user.name }}</h3>
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Task</th>
-                            <th>Valid</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for task in tasks %}
+                    <table>
+                        <thead>
                             <tr>
-                                <td>{{ task.description }}</td>
-                                <td>X</td>
+                                <th>Task</th>
+                                <th>Valid</th>
                             </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        {% endfor %}
+                        </thead>
+                        <tbody>
+                            {% for task in tasks %}
+                                <tr>
+                                    <td>{{ task.description }}</td>
+                                    <td>X</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

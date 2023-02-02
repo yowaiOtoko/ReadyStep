@@ -1,0 +1,14 @@
+
+.other-participants {
+    display: flex;
+    justify-content: space-around;
+    align-iems: center;
+    flex-wrap: wrap;
+}
+
+.other-participants .participant {
+    border: 1px solid silver;
+    margin: 10px;
+    padding: 6px;
+}
+

@@ -96,13 +96,12 @@ class SessionController extends AbstractController
             ]);
         }
 
-dump($userTasks);
-
         $tasksCompletion = [];
 
         foreach ($users as $objectUser) {
             foreach ($tasks as $taskKey => $task) {
                 $tasksCompletion[$objectUser->getName()][] = [
+                    'taskId' => $task->getId(),
                     'taskDescription' => $task->getDescription(),
                     'status' => false
                 ];
@@ -118,6 +117,11 @@ dump($userTasks);
             }
         }
 
+        $currentUserTasksCompletion = empty($tasksCompletion) ? '' : $tasksCompletion[$user->getName()];
+
+dump($currentUserTasksCompletion);
+dump($tasksCompletion);
+
         return $this->render('session/index.html.twig', [
             'session' => $session,
             'user' => $user,
@@ -126,7 +130,7 @@ dump($userTasks);
             'tasks' => $tasks,
             'userTasks' => $userTasks,
 
-            'currentUserTasksCompletion' => $tasksCompletion[$user->getName()],
+            'currentUserTasksCompletion' => $currentUserTasksCompletion,
             'tasksCompletion' => $tasksCompletion
         ]);
     }
