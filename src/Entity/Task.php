@@ -1,6 +1,8 @@
 <?php
 namespace App\Entity;
 
+use App\Entity\Task\SessionTask;
+use App\Entity\Task\TaskList;
 use Doctrine\ORM\Mapping AS ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -27,9 +29,16 @@ class Task
     #[ORM\OneToMany(targetEntity: UserTask::class, mappedBy: 'task')]
     private Collection $userTasks;
 
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    private ?TaskList $taskList = null;
+
+    #[ORM\OneToMany(mappedBy: 'task', targetEntity: SessionTask::class, orphanRemoval: true)]
+    private Collection $sessionTasks;
+
     public function __construct()
     {
         $this->userTasks = new ArrayCollection;
+        $this->sessionTasks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -69,6 +78,48 @@ class Task
     public function setSession(Session $session): self
     {
         $this->session = $session;
+
+        return $this;
+    }
+
+    public function getTaskList(): ?TaskList
+    {
+        return $this->taskList;
+    }
+
+    public function setTaskList(?TaskList $taskList): self
+    {
+        $this->taskList = $taskList;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SessionTask>
+     */
+    public function getSessionTasks(): Collection
+    {
+        return $this->sessionTasks;
+    }
+
+    public function addSessionTask(SessionTask $sessionTask): self
+    {
+        if (!$this->sessionTasks->contains($sessionTask)) {
+            $this->sessionTasks->add($sessionTask);
+            $sessionTask->setTask($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSessionTask(SessionTask $sessionTask): self
+    {
+        if ($this->sessionTasks->removeElement($sessionTask)) {
+            // set the owning side to null (unless already changed)
+            if ($sessionTask->getTask() === $this) {
+                $sessionTask->setTask(null);
+            }
+        }
 
         return $this;
     }

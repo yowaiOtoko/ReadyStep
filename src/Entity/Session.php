@@ -1,12 +1,24 @@
 <?php
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Get;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use App\Entity\Task\SessionTask;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'app_session')]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection()
+    ],
+    paginationEnabled: false,
+)]
 class Session
 {
     #[ORM\Id]
@@ -20,11 +32,17 @@ class Session
     #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'session')]
     private Collection $users;
 
-    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'session')]
+    #[ORM\OneToMany(targetEntity: SessionTask::class, mappedBy: 'session')]
     private Collection $tasks;
 
     #[ORM\OneToMany(mappedBy: 'session', targetEntity: UserTask::class)]
     private Collection $userTasks;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
+
+    #[ORM\Column(options: ["default" => 'CURRENT_TIMESTAMP'])]
+    private ?\DateTimeImmutable $createdAt = null;
 
     public function __construct()
     {
@@ -81,7 +99,7 @@ class Session
         return $this->tasks;
     }
 
-    public function addTask(Task $task): self
+    public function addTask(SessionTask $task): self
     {
         if (!$this->tasks->contains($task)) {
             $this->tasks->add($task);
@@ -124,6 +142,30 @@ class Session
                 $userTask->setSession(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

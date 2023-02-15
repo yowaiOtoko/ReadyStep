@@ -1,12 +1,23 @@
 <?php
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Get;
+use App\Entity\Task\TaskList;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'app_user')]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection()
+    ],
+    paginationEnabled: false,
+)]
 class User
 {
     #[ORM\Id]
@@ -27,9 +38,13 @@ class User
     #[ORM\OneToMany(targetEntity: UserTask::class, mappedBy: 'userTask')]
     private Collection $userTasks;
 
+    #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: TaskList::class, orphanRemoval: true)]
+    private Collection $taskLists;
+
     public function __construct()
     {
         $this->userTasks = new ArrayCollection;
+        $this->taskLists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -73,6 +88,36 @@ class User
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TaskList>
+     */
+    public function getTaskLists(): Collection
+    {
+        return $this->taskLists;
+    }
+
+    public function addTaskList(TaskList $taskList): self
+    {
+        if (!$this->taskLists->contains($taskList)) {
+            $this->taskLists->add($taskList);
+            $taskList->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTaskList(TaskList $taskList): self
+    {
+        if ($this->taskLists->removeElement($taskList)) {
+            // set the owning side to null (unless already changed)
+            if ($taskList->getCreatedBy() === $this) {
+                $taskList->setCreatedBy(null);
+            }
+        }
 
         return $this;
     }

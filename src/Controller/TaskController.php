@@ -16,9 +16,7 @@ class TaskController extends AbstractController
     #[Route('/check/{sessionId}/{taskId}/{userId}/{userTaskId}', name: 'check')]
     public function checkTask(ManagerRegistry $doctrine, int $taskId, int $userId, int $sessionId, $userTaskId)
     {
-        $session = $doctrine->getRepository(Session::class)->findOneBy([
-            'id' => $sessionId
-        ]);
+        $session = $doctrine->getRepository(Session::class)->find($sessionId);
 
         $user = $doctrine->getRepository(User::class)->findOneBy([
             'id' => $userId
@@ -34,7 +32,7 @@ class TaskController extends AbstractController
             $userTask->setCompleted(true);
 
             $entityManager->persist($userTask);
-            $entityManager->flush();   
+            $entityManager->flush();
         } else {
             $entityManager = $doctrine->getManager();
             $userTask = new UserTask;
