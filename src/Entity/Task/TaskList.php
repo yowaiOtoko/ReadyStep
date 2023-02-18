@@ -2,14 +2,14 @@
 
 namespace App\Entity\Task;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Task;
 use App\Entity\User;
-use App\Repository\Task\TaskListRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use App\Repository\Task\TaskListRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: TaskListRepository::class)]
 #[ApiResource]
@@ -36,10 +36,21 @@ class TaskList
     #[ORM\JoinColumn(nullable: true)]
     private ?User $createdBy = null;
 
+    #[ORM\OneToMany(mappedBy: 'taskList', targetEntity: TaskListMedia::class)]
+    private Collection $files;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?TaskListMedia $instructionFile = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $instructionText = null;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
+        $this->files = new ArrayCollection();
+        $this->instructionFile = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -124,4 +135,59 @@ class TaskList
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, TaskListMedia>
+     */
+    public function getFiles(): Collection
+    {
+        return $this->files;
+    }
+
+    public function addFile(TaskListMedia $file): self
+    {
+        if (!$this->files->contains($file)) {
+            $this->files->add($file);
+            $file->setTaskList($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFile(TaskListMedia $file): self
+    {
+        if ($this->files->removeElement($file)) {
+            // set the owning side to null (unless already changed)
+            if ($file->getTaskList() === $this) {
+                $file->setTaskList(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getInstructionFile(): ?TaskListMedia
+    {
+        return $this->instructionFile;
+    }
+
+    public function setInstructionFile(?TaskListMedia $instructionFile): self
+    {
+        $this->instructionFile = $instructionFile;
+
+        return $this;
+    }
+
+    public function getInstructionText(): ?string
+    {
+        return $this->instructionText;
+    }
+
+    public function setInstructionText(?string $instructionText): self
+    {
+        $this->instructionText = $instructionText;
+
+        return $this;
+    }
+
 }

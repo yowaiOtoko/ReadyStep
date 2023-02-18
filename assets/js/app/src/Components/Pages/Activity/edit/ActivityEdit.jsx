@@ -8,7 +8,7 @@ import ClientNameClass from './components/ClientName';
 import ProjectRateClass from './components/ProjectRate';
 import IssueClass from './components/IssueClass';
 import DescriptionRow from './components/EnterSomeDetails';
-import UploadProjectFileClass from './components/UploadProjectFile';
+import UploadActivityFileRow from './components/UploadActivityFileRow';
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { Container, Row, Col, Card, CardBody, Form, CardHeader } from 'reactstrap';
@@ -23,8 +23,12 @@ const ActivityEdit = () => {
         formState: { errors },
     } = useForm();
 
+
+
     const AddProject = (data) => {
         if (data !== '') {
+
+
             post('task_lists', data).then(data => {
                 console.log(data)
             })
@@ -55,7 +59,7 @@ const ActivityEdit = () => {
                                 <ActivityTitleRow register={register} errors={errors} />
                                 <DescriptionRow register={register} errors={errors} />
 
-                                {/* <UploadProjectFileClass register={register} errors={errors} /> */}
+                                <UploadActivityFileRow register={register} errors={errors} />
                                 <Row>
                                     <Col>
                                     <div className='text-end'>

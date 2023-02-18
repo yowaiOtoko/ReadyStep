@@ -1,5 +1,6 @@
 import React, { Fragment, useCallback, useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component';
+import { Link } from 'react-router-dom';
 import { Btn, H4 } from '../../../../AbstractElements';
 import { get } from '../../../../_helper/utils.js';
 // import { dummytabledata, tableColumns } from '../../../../Data/Table/Defaultdata';
@@ -25,7 +26,10 @@ const ActivityList = () => {
 
     const getRow = (session) => {
         return  {
-            name: session.name,
+            name: (
+            <Link to={`${process.env.PUBLIC_URL}/app/activity/show/${session.id}`}>
+                {session.name}
+            </Link>),
             description: session.description,
             steps: session.tasks.lenght,
             date: session.createdAt,

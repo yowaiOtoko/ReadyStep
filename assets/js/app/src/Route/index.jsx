@@ -41,11 +41,11 @@ const Routers = () => {
               {currentUser || authenticated || jwt_token ? (
                 <>
 
-                  <Route exact path={`${process.env.PUBLIC_URL}`} element={<Navigate to={`${process.env.PUBLIC_URL}/pages/sample-page/${layout}`} />} />
-                  <Route exact path={`/`} element={<Navigate to={`${process.env.PUBLIC_URL}/pages/sample-page/${layout}`} />} />
+                  <Route exact path={`${process.env.PUBLIC_URL}`} element={<Navigate to={`${process.env.PUBLIC_URL}/app/activity/list`} />} />
+                  <Route exact path={`/`} element={<Navigate to={`${process.env.PUBLIC_URL}/app/activity/list`} />} />
                 </>
               ) : (
-                'aaaazzz'
+                ''
               )}
               <Route path={`/*`} element={<LayoutRoutes />} />
             </Route>

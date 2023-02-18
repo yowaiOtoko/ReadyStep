@@ -9,15 +9,16 @@ export const get = (url) => {
 
 };
 
-export const post = async (url, data) =>  {
+export const post = async (url, data, options) =>  {
 
-  const response = await fetch(`${host}/${url}`, {
+  const defaultOptions = {
     method: 'POST',
     headers: {
       'Content-type': 'application/json'
     },
     body: JSON.stringify(data)
-  });
+  };
+  const response = await fetch(`${host}/${url}`,  {...defaultOptions, ...options});
 
   const resData = await response.json();
 
