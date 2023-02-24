@@ -32,14 +32,18 @@ final class ImportInstructionFileAction extends AbstractController
         $tempFilePath =  uniqid($uploadedFile->getClientOriginalName());
         $uploadedFile->move(sys_get_temp_dir(), $tempFilePath);
 
-        $content = $this->pdfToHtml(sys_get_temp_dir().'/'.$tempFilePath);
+        $contentPath = $this->pdfToHtml(sys_get_temp_dir().'/'.$tempFilePath);
 
+        //$content = preg_replace('/(.*\n)/', '$1', file_get_contents($contentPath));
+        $content =  file_get_contents($contentPath);
+
+        //throw new \Exception($content);
         $activity = $repository->find($id);
         if(!$activity) {
             throw new NotFoundHttpException('Activity not found');
         }
 
-        $activity->setInstructionText(file_get_contents($content));
+        $activity->setInstructionText($content);
 
         $em->persist($activity);
         $em->flush();

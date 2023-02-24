@@ -1,1 +1,40 @@
 @import './assets/scss/app.scss';
+
+$section-color-text: #b2df8a;
+$section-color-title: #fed9a6;
+$section-color-task-group: #33a02c;
+$section-color-task: #b3cde3;
+
+
+.new-section-action-popover {
+    user-select: none
+}
+
+.section-text-background-color {
+    background-color: $section-color-text !important;
+    border-color: $section-color-text !important;
+}
+
+.section-task-background-color {
+    background-color: $section-color-task !important;
+    border-color: $section-color-task !important;
+}
+.section-task-group-background-color {
+    background-color: $section-color-task-group !important;
+    border-color: $section-color-task-group !important;
+}
+
+.section-title-background-color {
+    background-color: $section-color-title !important;
+    border-color: $section-color-title !important;
+}
+
+.new-section-action-popover button {
+    margin-right: 6px
+}
+
+
+.selected-section {
+    padding: 4px;
+    border-radius: 4px;
+}
