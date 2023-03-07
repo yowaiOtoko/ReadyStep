@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Breadcrumbs, H5, P } from "../../../../AbstractElements";
 import { Card, CardBody, CardHeader, Col, Container, Row, Button } from "reactstrap";
 import { Link, useParams } from "react-router-dom";
-import { get } from "../../../../_helper/utils";
+import { get, post } from "../../../../_helper/utils";
 import UploadActivityFile from "./UploadActivityFile";
 import { Editor } from "../../../Common/mdxEditor";
 import Preview from "./Preview";
@@ -34,13 +34,20 @@ const ImportInstructions = () => {
         setNodes({});
     };
 
+    const onSave = () => {
+        post(`task-lists/${id}/save`, nodes).then((data) => {
+            console.log(data);
+        });
+
+    };
+
     if (!activity) return null;
     return (
         <Fragment>
             <Breadcrumbs
-                mainTitle="Sample Card"
-                parent="Pages"
-                title="Sample Card"
+                mainTitle="Importer un fichier"
+                title={<Link to={`/app/activity/show/${activity.id}`}>{activity.name}</Link>}
+                parent={<Link to={'/app/activity/list'}>Activités</Link>}
             />
             <Container fluid={true}>
                 <Row>
@@ -52,7 +59,7 @@ const ImportInstructions = () => {
                                     Importer un fichier avec les instructions de
                                     l'activité
                                 </span>
-                                <Button onClicked={onSave}>Sauvegarder</Button>
+                                <Button onClick={onSave}>Sauvegarder</Button>
                             </CardHeader>
                             <CardBody>
                                 <Row>
@@ -73,9 +80,6 @@ const ImportInstructions = () => {
                                         {<Preview nodes={nodes}/>}
                                     </Col>
                                 </Row>
-
-
-
                                 {/* { activityText && <Editor children={activityText} onContentUpdated={onContentUpdated}></Editor>} */}
                             </CardBody>
                         </Card>

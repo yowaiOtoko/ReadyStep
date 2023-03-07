@@ -1,26 +1,31 @@
 <?php
+
 namespace App\Entity;
 
-use App\Entity\Task\SessionTask;
+use Gedmo\Timestampable;
 use App\Entity\Task\TaskList;
-use Doctrine\ORM\Mapping AS ORM;
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\DBAL\Types\Types;
+use App\Entity\Task\SessionTask;
+use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'app_task')]
+#[ApiResource()]
 class Task
 {
+    use TimestampableEntity;
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'description', type: 'text', nullable: false)]
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     private ?string $description = null;
-
-    #[ORM\Column(name: 'created_at', type: 'datetime_immutable', nullable: false)]
-    private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\ManyToOne(targetEntity: Session::class, inversedBy: 'tasks')]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id')]
@@ -35,10 +40,21 @@ class Task
     #[ORM\OneToMany(mappedBy: 'task', targetEntity: SessionTask::class, orphanRemoval: true)]
     private Collection $sessionTasks;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $label = null;
+
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'tasks')]
+    private ?self $parentTask = null;
+
+    #[ORM\OneToMany(mappedBy: 'parentTask', targetEntity: self::class, cascade: ['persist', 'remove'])]
+    #[ApiProperty(readableLink: true)]
+    private Collection $tasks;
+
     public function __construct()
     {
         $this->userTasks = new ArrayCollection;
         $this->sessionTasks = new ArrayCollection();
+        $this->tasks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -58,17 +74,7 @@ class Task
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
 
     public function getSession(): ?Session
     {
@@ -118,6 +124,60 @@ class Task
             // set the owning side to null (unless already changed)
             if ($sessionTask->getTask() === $this) {
                 $sessionTask->setTask(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getLabel(): ?string
+    {
+        return $this->label;
+    }
+
+    public function setLabel(string $label): self
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
+    public function getParentTask(): ?self
+    {
+        return $this->parentTask;
+    }
+
+    public function setParentTask(?self $parentTask): self
+    {
+        $this->parentTask = $parentTask;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(self $task): self
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks->add($task);
+            $task->setParentTask($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(self $task): self
+    {
+        if ($this->tasks->removeElement($task)) {
+            // set the owning side to null (unless already changed)
+            if ($task->getParentTask() === $this) {
+                $task->setParentTask(null);
             }
         }
 

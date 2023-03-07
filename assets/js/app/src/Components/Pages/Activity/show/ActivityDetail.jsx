@@ -3,6 +3,8 @@ import { Breadcrumbs, H5, P } from "../../../../AbstractElements";
 import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
 import { Link, useParams } from "react-router-dom";
 import { get } from "../../../../_helper/utils";
+import { Task } from "./Task";
+import { TaskGroup } from "./TaskGroup";
 
 const ActivityDetail = () => {
     let { id } = useParams();
@@ -19,29 +21,44 @@ const ActivityDetail = () => {
     return (
         <Fragment>
             <Breadcrumbs
-                mainTitle="Sample Card"
-                parent="Pages"
-                title="Sample Card"
+                mainTitle={activity.name}
+                parent={<Link to={'/app/activity/list'}>Activités</Link>}
+
             />
             <Container fluid={true}>
                 <Row>
                     <Col sm="12">
                         <Card>
                             <CardHeader>
-                                <H5>{activity.name}</H5>
-                                <span>
-                                    {activity.createdAt}
-                                </span>
+                                <div className="d-flex justify-content-between">
+                                    <div>
+                                        <H5>{activity.name}</H5>
+                                        <span>
+                                            {activity.createdAt}
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <Link
+                                            className="btn btn-primary"
+                                            to={`/app/activity/import/${activity.id}`}>
+                                            Importer un fichier
+                                        </Link>
+                                    </div>
+                                </div>
                             </CardHeader>
                             <CardBody>
-                                <Link
-                                    className="btn btn-primary"
-                                    to={`${process.env.PUBLIC_URL}/app/activity/importer/${activity.id}`}>
-                                    Importer un fichier
-                                </Link>
+
                                 <p style={{whiteSpace: "pre-wrap"}}>
                                     {activity.description}
                                 </p>
+                                <Row>
+                                    <Col sm='12'>
+                                        {activity.tasks.map((task, index) => (
+                                            task.label ? <TaskGroup key={index} task={task}/> : <Task key={index} task={task}/>
+                                        ))}
+                                    </Col>
+                                </Row>
+
                             </CardBody>
                         </Card>
                     </Col>

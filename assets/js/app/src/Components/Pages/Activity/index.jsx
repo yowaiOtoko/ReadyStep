@@ -11,8 +11,8 @@ const Activity = () => {
         <Fragment>
             <Breadcrumbs
                 mainTitle="Activités"
-                parent="Pages"
-                title="Activités"
+
+
             />
             <Container fluid={true}>
                 <Row>

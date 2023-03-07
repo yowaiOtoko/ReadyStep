@@ -6,6 +6,7 @@ use App\Entity\Task;
 use App\Entity\User;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\Task\TaskListRepository;
 use Doctrine\Common\Collections\Collection;
@@ -26,7 +27,9 @@ class TaskList
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\OneToMany(mappedBy: 'taskList', targetEntity: Task::class)]
+
+    #[ORM\OneToMany(mappedBy: 'taskList', targetEntity: Task::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ApiProperty(readableLink: true)]
     private Collection $tasks;
 
     #[ORM\Column]
@@ -50,7 +53,6 @@ class TaskList
         $this->tasks = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->files = new ArrayCollection();
-        $this->instructionFile = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -82,9 +84,7 @@ class TaskList
         return $this;
     }
 
-    /**
-     * @return Collection<int, Task>
-     */
+
     public function getTasks(): Collection
     {
         return $this->tasks;
@@ -189,5 +189,4 @@ class TaskList
 
         return $this;
     }
-
 }

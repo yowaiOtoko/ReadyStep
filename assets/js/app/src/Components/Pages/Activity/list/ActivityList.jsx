@@ -27,7 +27,7 @@ const ActivityList = () => {
     const getRow = (session) => {
         return  {
             name: (
-            <Link to={`${process.env.PUBLIC_URL}/app/activity/show/${session.id}`}>
+            <Link to={`/app/activity/show/${session.id}`}>
                 {session.name}
             </Link>),
             description: session.description,
