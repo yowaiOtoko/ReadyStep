@@ -31,7 +31,7 @@ const ActivityList = () => {
                 {session.name}
             </Link>),
             description: session.description,
-            steps: session.tasks.lenght,
+            steps: session.tasks?.length ? session.tasks.length : '-',
             date: session.createdAt,
             by: session.createdBy
         }
@@ -39,6 +39,8 @@ const ActivityList = () => {
 
 
     const rows = activities.map(getRow);
+
+    console.log(rows)
     const tableColumns =  [
         {
             name: 'Name',
@@ -48,22 +50,26 @@ const ActivityList = () => {
         },
         {
             name: 'Description',
+            selector: row => row['description'],
             sortable: true,
             center: false,
         },
         {
             name: 'steps',
             sortable: true,
+            selector: row => row['steps'],
             center: false,
         },
         {
             name: 'date',
             sortable: true,
+            selector: row => row['date'],
             center: false,
         },
         {
             name: 'by',
             sortable: true,
+            selector: row => row['by'],
             center: false,
         },
     ];

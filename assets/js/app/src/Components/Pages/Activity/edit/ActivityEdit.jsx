@@ -23,6 +23,8 @@ const ActivityEdit = () => {
         formState: { errors },
     } = useForm();
 
+    const history = useNavigate();
+
 
 
     const AddProject = (data) => {
@@ -31,6 +33,7 @@ const ActivityEdit = () => {
 
             post('task_lists', data).then(data => {
                 console.log(data)
+                history(`/app/activity/list`);
             })
             console.log(data)
             //project.addNewProject(data);

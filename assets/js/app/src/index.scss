@@ -88,5 +88,27 @@ textarea.task-description-edit  {
 }
 
 .ck-content {
-    font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+    font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace !important;
+    background-color: #f8f9fa !important;
+    border: none !important;
+    border-top: 3px solid transparent !important;
+
+    transition: background .5s ease-out !important; // global
+    -moz-transition: all .5s ease-out; // for mozilla
+    -o-transition: all .5s ease-out; // for opera
+    -webkit-transition: all .5s ease-out; //for webkit, chrome or safari
+}
+
+.ck-content:focus {
+    border-top: 3px solid cornflowerblue !important;
+    //border: 4px solid #0266C8 !important;
+    transition: background .1s ease-in !important; // global
+   -moz-transition: all .1s ease-in !important; // for mozilla
+   -o-transition: all .1s ease-in !important; // for opera
+   -webkit-transition: all .1s ease-in !important; //for webkit, chrome or safari
+}
+
+.ck-toolbar {
+    border: none !important;
+
 }

@@ -11,9 +11,7 @@ import TextSelector from "./TextSelector";
 const ImportInstructions = () => {
     let { id } = useParams();
     const [activity, setActivity] = useState();
-    const [activityText, setActivityText] = useState(
-        "aaaaaaaa zzzzzzzzz eeeeeeeeeeee   "
-    );
+    const [activityText, setActivityText] = useState();
     const [nodes, setNodes] = useState({});
 
     useEffect(() => {

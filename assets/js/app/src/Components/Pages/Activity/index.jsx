@@ -11,8 +11,6 @@ const Activity = () => {
         <Fragment>
             <Breadcrumbs
                 mainTitle="Activités"
-
-
             />
             <Container fluid={true}>
                 <Row>
@@ -31,7 +29,7 @@ const Activity = () => {
                                             >
 
                                                 <PlusCircle />
-                                                Nouvelle activité
+                                                <span style={{marginRight:"3"}}> Nouvelle activité</span>
                                             </Link>
                                         </div>
                                     </Col>

@@ -3,6 +3,7 @@ import { Button, OverlayTrigger, Popover, Tooltip } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import reactStringReplace from "react-string-replace";
 import {SectionTypes} from "../../../../_helper/constants";
+import { ckTransform } from "../../../../_helper/ckEditorUtils";
 
 // const select = (e) => {
 //     const selection = window.getSelection();
@@ -121,6 +122,7 @@ const highlightSelection = (anchorNode, focusNode, type) => {
 }
 
 
+
 const TextSelector = ({ text, nodes, setNodes }) => {
     const [target, setTarget] = useState("");
     const [isOpen, setIsOpen] = useState(true);
@@ -130,9 +132,14 @@ const TextSelector = ({ text, nodes, setNodes }) => {
     const onSectionAdded = (e, id, type) => {
 
         const sel = window.getSelection();
+        const doFormat = [SectionTypes.TASK, SectionTypes.TEXT].indexOf(type) > -1;
+        console.log(doFormat)
+        const content = doFormat ? ckTransform(sel.toString()) : sel.toString();
+
+        console.log("'"+content+"'")
 
         setNodes({ ...nodes, [id]: {
-            content: sel.toString(),
+            content: content,
             type,
             startIndex: sel.anchorNode.getAttribute("data-index"),
             endIndex: sel.focusNode.getAttribute("data-index")

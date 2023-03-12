@@ -13,7 +13,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: TaskListRepository::class)]
-#[ApiResource]
+#[ApiResource(order: ['createdAt' => 'DESC'])]
 class TaskList
 {
     #[ORM\Id]
@@ -188,5 +188,11 @@ class TaskList
         $this->instructionText = $instructionText;
 
         return $this;
+    }
+
+    #[ApiProperty()]
+    public function getCreatorName(): ?string
+    {
+        return $this->createdBy ? $this->createdBy->getName() : null;
     }
 }
