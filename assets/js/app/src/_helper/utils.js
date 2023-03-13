@@ -39,3 +39,15 @@ export const put = async (url, data) =>  {
 
   return resData;
 }
+
+export const del = async (url) =>  {
+
+  const response = await fetch(`${host}/${url}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-type': 'application/json'
+    },
+  });
+
+  return response;
+}

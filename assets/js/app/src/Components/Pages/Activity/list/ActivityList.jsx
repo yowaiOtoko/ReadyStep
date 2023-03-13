@@ -1,13 +1,17 @@
 import React, { Fragment, useCallback, useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component';
 import { Link } from 'react-router-dom';
+import { Button } from 'reactstrap';
 import { Btn, H4 } from '../../../../AbstractElements';
-import { get } from '../../../../_helper/utils.js';
+import { get, del } from '../../../../_helper/utils.js';
+import DeleteModal from './DeleteModal';
 // import { dummytabledata, tableColumns } from '../../../../Data/Table/Defaultdata';
 
 const ActivityList = () => {
     const [selectedRows, setSelectedRows] = useState([]);
-    const [toggleDelet, setToggleDelet] = useState(false);
+    const [toggleDelete, setToggleDelete] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
+
     // const [data, setData] = useState(dummytabledata);
 
     const handleRowSelected = useCallback(state => {
@@ -18,7 +22,7 @@ const ActivityList = () => {
     const [activities, setActivities] = useState([]);
 
     useEffect(() => {
-        get('task_lists').then((data) => {
+        get('activities').then((data) => {
         console.log(data);
         setActivities(data['hydra:member']);
         });
@@ -33,9 +37,25 @@ const ActivityList = () => {
             description: session.description,
             steps: session.tasks?.length ? session.tasks.length : '-',
             date: session.createdAt,
-            by: session.createdBy
+            by: session.createdBy,
+            actions: (
+                <div className="d-flex justify-content-center">
+                    <Link to={`/app/activity/show/${session.id}`} className="btn btn-sm btn-primary me-2 ">Commencer</Link>
+                    <Button color="danger" outline onClick={()=> { setDeleteId(session.id); setToggleDelete(true)}} className="btn btn-sm">Supp</Button>
+                </div>
+            ),
+
         }
     };
+
+    const onDelete = () => {
+        console.log(deleteId);
+        setToggleDelete(false);
+        del(`activities/${deleteId}`).then(() => {
+
+            setActivities(activities.filter((activity) => activity.id !== deleteId));
+        })
+    }
 
 
     const rows = activities.map(getRow);
@@ -72,18 +92,15 @@ const ActivityList = () => {
             selector: row => row['by'],
             center: false,
         },
+        {
+            name: 'actions',
+            sortable: false,
+            selector: row => row['actions'],
+            center: false,
+        },
     ];
 
 
-
-    // const handleDelete = () => {
-    //     if (window.confirm(`Are you sure you want to delete:\r ${selectedRows.map(r => r.title)}?`)) {
-    //         setToggleDelet(!toggleDelet);
-
-    //         setData(data.filter((item) => selectedRows.filter((elem) => elem.id === item.id).length > 0 ? false : true));
-    //         setSelectedRows('');
-    //     }
-    // };
     return (
         <Fragment>
             {(selectedRows.length !== 0) &&
@@ -100,8 +117,14 @@ const ActivityList = () => {
                 pagination
                 selectableRows
                 onSelectedRowsChange={handleRowSelected}
-                clearSelectedRows={toggleDelet}
+                clearSelectedRows={toggleDelete}
             />
+            <DeleteModal
+                onDelete={onDelete}
+                isOpen={toggleDelete}
+                toggler={() => setToggleDelete(!toggleDelete)}
+
+                />
         </Fragment>
     )
 }
