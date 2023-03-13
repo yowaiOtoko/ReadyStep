@@ -6,11 +6,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\Persistence\ManagerRegistry;
-use App\Entity\Session;
+use App\Entity\Task\Session;
 use App\Form\UserType;
 use App\Entity\User;
 use App\Form\TaskType;
-use App\Entity\Task;
+use App\Entity\Task\Task;
 use App\Entity\UserTask;
 
 #[Route('/session', name: 'session_')]

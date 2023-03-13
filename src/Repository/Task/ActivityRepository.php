@@ -2,26 +2,26 @@
 
 namespace App\Repository\Task;
 
-use App\Entity\Task\TaskList;
+use App\Entity\Task\Activity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<TaskList>
+ * @extends ServiceEntityRepository<Activity>
  *
- * @method TaskList|null find($id, $lockMode = null, $lockVersion = null)
- * @method TaskList|null findOneBy(array $criteria, array $orderBy = null)
- * @method TaskList[]    findAll()
- * @method TaskList[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Activity|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Activity|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Activity[]    findAll()
+ * @method Activity[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class TaskListRepository extends ServiceEntityRepository
+class ActivityRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, TaskList::class);
+        parent::__construct($registry, Activity::class);
     }
 
-    public function save(TaskList $entity, bool $flush = false): void
+    public function save(Activity $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class TaskListRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(TaskList $entity, bool $flush = false): void
+    public function remove(Activity $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class TaskListRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return TaskList[] Returns an array of TaskList objects
+//     * @return Activity[] Returns an array of Activity objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class TaskListRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?TaskList
+//    public function findOneBySomeField($value): ?Activity
 //    {
 //        return $this->createQueryBuilder('t')
 //            ->andWhere('t.exampleField = :val')

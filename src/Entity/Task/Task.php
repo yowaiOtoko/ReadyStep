@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Task;
 
 use Gedmo\Timestampable;
-use App\Entity\Task\TaskList;
+use App\Entity\Task\Session;
+use App\Entity\Task\Activity;
+use App\Entity\Task\UserTask;
 use Doctrine\DBAL\Types\Types;
 use App\Entity\Task\SessionTask;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,7 +16,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'app_task')]
+#[ORM\Table(name: 'task_task')]
 #[ApiResource()]
 class Task
 {
@@ -27,15 +29,11 @@ class Task
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     private ?string $description = null;
 
-    #[ORM\ManyToOne(targetEntity: Session::class, inversedBy: 'tasks')]
-    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id')]
-    private ?Session $session = null;
-
     #[ORM\OneToMany(targetEntity: UserTask::class, mappedBy: 'task')]
     private Collection $userTasks;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
-    private ?TaskList $taskList = null;
+    private ?Activity $activity = null;
 
     #[ORM\OneToMany(mappedBy: 'task', targetEntity: SessionTask::class, orphanRemoval: true)]
     private Collection $sessionTasks;
@@ -74,28 +72,14 @@ class Task
         return $this;
     }
 
-
-
-    public function getSession(): ?Session
+    public function getActivity(): ?Activity
     {
-        return $this->session;
+        return $this->activity;
     }
 
-    public function setSession(Session $session): self
+    public function setActivity(?Activity $activity): self
     {
-        $this->session = $session;
-
-        return $this;
-    }
-
-    public function getTaskList(): ?TaskList
-    {
-        return $this->taskList;
-    }
-
-    public function setTaskList(?TaskList $taskList): self
-    {
-        $this->taskList = $taskList;
+        $this->activity = $activity;
 
         return $this;
     }

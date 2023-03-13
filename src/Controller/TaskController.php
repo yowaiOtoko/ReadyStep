@@ -7,8 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\UserTask;
 use App\Entity\User;
-use App\Entity\Task;
-use App\Entity\Session;
+use App\Entity\Task\Task;
+use App\Entity\Task\Session;
 
 #[Route('/task', name: 'task_')]
 class TaskController extends AbstractController

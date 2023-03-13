@@ -3,12 +3,13 @@
 namespace App\Entity\Task;
 
 use ApiPlatform\Metadata\ApiResource;
-use App\Entity\Session;
-use App\Entity\Task;
+use App\Entity\Task\Session;
+use App\Entity\Task\Task;
 use App\Repository\Task\SessionTaskRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SessionTaskRepository::class)]
+#[ORM\Table(name: 'task_session_task')]
 #[ApiResource]
 class SessionTask
 {
@@ -29,7 +30,7 @@ class SessionTask
     #[ORM\Column]
     private ?bool $isActive = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne (targetEntity: Session::class, inversedBy: 'sessionTasks')]
     private ?Session $session = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessionTasks')]

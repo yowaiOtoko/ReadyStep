@@ -2,19 +2,21 @@
 
 namespace App\Entity\Task;
 
-use App\Entity\Task;
 use App\Entity\User;
+use App\Entity\Task\Task;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Task\ActivityMedia;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
-use App\Repository\Task\TaskListRepository;
+use App\Repository\Task\ActivityRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
-#[ORM\Entity(repositoryClass: TaskListRepository::class)]
+#[ORM\Entity(repositoryClass: ActivityRepository::class)]
+#[ORM\Table(name: 'task_activity')]
 #[ApiResource(order: ['createdAt' => 'DESC'])]
-class TaskList
+class Activity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -28,22 +30,22 @@ class TaskList
     private ?string $description = null;
 
 
-    #[ORM\OneToMany(mappedBy: 'taskList', targetEntity: Task::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'activity', targetEntity: Task::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ApiProperty(readableLink: true)]
     private Collection $tasks;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'taskLists')]
+    #[ORM\ManyToOne(inversedBy: 'activities')]
     #[ORM\JoinColumn(nullable: true)]
     private ?User $createdBy = null;
 
-    #[ORM\OneToMany(mappedBy: 'taskList', targetEntity: TaskListMedia::class)]
+    #[ORM\OneToMany(mappedBy: 'activity', targetEntity: ActivityMedia::class)]
     private Collection $files;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?TaskListMedia $instructionFile = null;
+    private ?ActivityMedia $instructionFile = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $instructionText = null;
@@ -94,7 +96,7 @@ class TaskList
     {
         if (!$this->tasks->contains($task)) {
             $this->tasks->add($task);
-            $task->setTaskList($this);
+            $task->setActivity($this);
         }
 
         return $this;
@@ -104,8 +106,8 @@ class TaskList
     {
         if ($this->tasks->removeElement($task)) {
             // set the owning side to null (unless already changed)
-            if ($task->getTaskList() === $this) {
-                $task->setTaskList(null);
+            if ($task->getActivity() === $this) {
+                $task->setActivity(null);
             }
         }
 
@@ -137,41 +139,41 @@ class TaskList
     }
 
     /**
-     * @return Collection<int, TaskListMedia>
+     * @return Collection<int, ActivityMedia>
      */
     public function getFiles(): Collection
     {
         return $this->files;
     }
 
-    public function addFile(TaskListMedia $file): self
+    public function addFile(ActivityMedia $file): self
     {
         if (!$this->files->contains($file)) {
             $this->files->add($file);
-            $file->setTaskList($this);
+            $file->setActivity($this);
         }
 
         return $this;
     }
 
-    public function removeFile(TaskListMedia $file): self
+    public function removeFile(ActivityMedia $file): self
     {
         if ($this->files->removeElement($file)) {
             // set the owning side to null (unless already changed)
-            if ($file->getTaskList() === $this) {
-                $file->setTaskList(null);
+            if ($file->getActivity() === $this) {
+                $file->setActivity(null);
             }
         }
 
         return $this;
     }
 
-    public function getInstructionFile(): ?TaskListMedia
+    public function getInstructionFile(): ?ActivityMedia
     {
         return $this->instructionFile;
     }
 
-    public function setInstructionFile(?TaskListMedia $instructionFile): self
+    public function setInstructionFile(?ActivityMedia $instructionFile): self
     {
         $this->instructionFile = $instructionFile;
 

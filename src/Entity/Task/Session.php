@@ -1,17 +1,20 @@
 <?php
-namespace App\Entity;
+namespace App\Entity\Task;
 
+use App\Entity\User;
+use App\Entity\Task\Task;
 use ApiPlatform\Metadata\Get;
+use App\Entity\Task\UserTask;
 use Doctrine\DBAL\Types\Types;
+use App\Entity\Task\SessionTask;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
-use App\Entity\Task\SessionTask;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'app_session')]
+#[ORM\Table(name: 'task_session')]
 #[ApiResource(
     operations: [
         new Get(),
@@ -33,7 +36,7 @@ class Session
     private Collection $users;
 
     #[ORM\OneToMany(targetEntity: SessionTask::class, mappedBy: 'session')]
-    private Collection $tasks;
+    private Collection $sessionTasks;
 
     #[ORM\OneToMany(mappedBy: 'session', targetEntity: UserTask::class)]
     private Collection $userTasks;
@@ -47,7 +50,7 @@ class Session
     public function __construct()
     {
         $this->users = new ArrayCollection();
-        $this->tasks = new ArrayCollection();
+        $this->sessionTasks = new ArrayCollection();
         $this->userTasks = new ArrayCollection();
     }
 
@@ -94,26 +97,26 @@ class Session
         return $this;
     }
 
-    public function getTasks(): Collection
+    public function getSessionTasks(): Collection
     {
-        return $this->tasks;
+        return $this->sessionTasks;
     }
 
-    public function addTask(SessionTask $task): self
+    public function addSessionTask(SessionTask $sessionTask): self
     {
-        if (!$this->tasks->contains($task)) {
-            $this->tasks->add($task);
-            $task->setSession($this);
+        if (!$this->sessionTasks->contains($sessionTask)) {
+            $this->sessionTasks->add($sessionTask);
+            $sessionTask->setSession($this);
         }
 
         return $this;
     }
 
-    public function removeTask(Task $task): self
+    public function removeSessionTask(Task $sessionTask): self
     {
-        if ($this->tasks->removeElement($task)) {
-            if ($task->getSession() === $this) {
-                $task->setSession(null);
+        if ($this->sessionTasks->removeElement($sessionTask)) {
+            if ($sessionTask->getSession() === $this) {
+                $sessionTask->setSession(null);
             }
         }
 

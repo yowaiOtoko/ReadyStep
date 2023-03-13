@@ -1,8 +1,10 @@
 <?php
 namespace App\Entity;
 
+use App\Entity\Task\Session;
 use ApiPlatform\Metadata\Get;
-use App\Entity\Task\TaskList;
+use App\Entity\Task\Activity;
+use App\Entity\Task\UserTask;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
@@ -35,16 +37,16 @@ class User
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id')]
     private ?Session $session = null;
 
-    #[ORM\OneToMany(targetEntity: UserTask::class, mappedBy: 'userTask')]
+    #[ORM\OneToMany(targetEntity: UserTask::class, mappedBy: 'user')]
     private Collection $userTasks;
 
-    #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: TaskList::class, orphanRemoval: true)]
-    private Collection $taskLists;
+    #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: Activity::class, orphanRemoval: true)]
+    private Collection $activities;
 
     public function __construct()
     {
         $this->userTasks = new ArrayCollection;
-        $this->taskLists = new ArrayCollection();
+        $this->activities = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -93,29 +95,29 @@ class User
     }
 
     /**
-     * @return Collection<int, TaskList>
+     * @return Collection<int, Activity>
      */
-    public function getTaskLists(): Collection
+    public function getActivities(): Collection
     {
-        return $this->taskLists;
+        return $this->activities;
     }
 
-    public function addTaskList(TaskList $taskList): self
+    public function addActivity(Activity $activity): self
     {
-        if (!$this->taskLists->contains($taskList)) {
-            $this->taskLists->add($taskList);
-            $taskList->setCreatedBy($this);
+        if (!$this->activities->contains($activity)) {
+            $this->activities->add($activity);
+            $activity->setCreatedBy($this);
         }
 
         return $this;
     }
 
-    public function removeTaskList(TaskList $taskList): self
+    public function removeActivity(Activity $activity): self
     {
-        if ($this->taskLists->removeElement($taskList)) {
+        if ($this->activities->removeElement($activity)) {
             // set the owning side to null (unless already changed)
-            if ($taskList->getCreatedBy() === $this) {
-                $taskList->setCreatedBy(null);
+            if ($activity->getCreatedBy() === $this) {
+                $activity->setCreatedBy(null);
             }
         }
 

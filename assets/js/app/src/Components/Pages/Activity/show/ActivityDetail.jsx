@@ -11,7 +11,7 @@ const ActivityDetail = () => {
     const [activity, setActivity] = useState();
 
     useEffect(() => {
-        get(`task_lists/${id}`).then((data) => {
+        get(`activities/${id}`).then((data) => {
             console.log(data);
             setActivity(data);
         });

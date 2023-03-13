@@ -3,10 +3,10 @@
 
 namespace App\Controller\Task;
 
-use App\Entity\Task;
+use App\Entity\Task\Task;
 use App\Utils\SectionType;
-use App\Entity\Task\TaskList;
-use App\Repository\Task\TaskListRepository;
+use App\Entity\Task\Activity;
+use App\Repository\Task\ActivityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,7 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/api/task-lists/{id}/save', methods: ['POST'])]
 class SaveActivityAction extends AbstractController
 {
-    public function __invoke(Request $request, EntityManagerInterface $em, TaskListRepository $activityRepos)
+    public function __invoke(Request $request, EntityManagerInterface $em, ActivityRepository $activityRepos)
     {
         $data = json_decode($request->getContent(), true);
 
@@ -36,7 +36,7 @@ class SaveActivityAction extends AbstractController
         return new JsonResponse($activity);
     }
 
-    private function handleData(array $data, TaskList $activity): void
+    private function handleData(array $data, Activity $activity): void
     {
 
         $task = null;

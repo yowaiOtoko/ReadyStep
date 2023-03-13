@@ -6,7 +6,7 @@ namespace App\Controller\Task;
 
 use Symfony\Component\Process\Process;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\Task\TaskListRepository;
+use App\Repository\Task\ActivityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 #[Route('/api/task-lists/{id}/import', methods: ['POST'])]
 final class ImportInstructionFileAction extends AbstractController
 {
-    public function __invoke(Request $request, $id, TaskListRepository $repository, EntityManagerInterface $em): JsonResponse
+    public function __invoke(Request $request, $id, ActivityRepository $repository, EntityManagerInterface $em): JsonResponse
     {
         /** @var UploadedFile */
         $uploadedFile = $request->files->get('file');

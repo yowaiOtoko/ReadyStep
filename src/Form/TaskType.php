@@ -6,7 +6,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use App\Entity\Task;
+use App\Entity\Task\Task;
 
 class TaskType extends AbstractType
 {
@@ -24,4 +24,4 @@ class TaskType extends AbstractType
             'data_class' => Task::class
         ]);
     }
-} 
+}

@@ -1,10 +1,13 @@
 <?php
-namespace App\Entity;
+namespace App\Entity\Task;
 
+use App\Entity\User;
+use App\Entity\Task\Task;
+use App\Entity\Task\Session;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'app_user_task')]
+#[ORM\Table(name: 'task_user_task')]
 class UserTask
 {
     #[ORM\Id]
@@ -43,7 +46,7 @@ class UserTask
         return $this->id;
     }
 
-    public function getCompleted(): ?bool 
+    public function getCompleted(): ?bool
     {
         return $this->completed;
     }

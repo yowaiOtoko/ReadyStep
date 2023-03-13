@@ -31,7 +31,7 @@ const ActivityEdit = () => {
         if (data !== '') {
 
 
-            post('task_lists', data).then(data => {
+            post('activities', data).then(data => {
                 console.log(data)
                 history(`/app/activity/list`);
             })

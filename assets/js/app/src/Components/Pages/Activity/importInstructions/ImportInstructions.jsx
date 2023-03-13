@@ -15,14 +15,14 @@ const ImportInstructions = () => {
     const [nodes, setNodes] = useState({});
 
     useEffect(() => {
-        get(`task_lists/${id}`).then((data) => {
+        get(`activities/${id}`).then((data) => {
             console.log(data);
             setActivity(data);
         });
     }, []);
 
     const onFileResponse = () => {
-        get(`task_lists/${id}`).then((data) => {
+        get(`activities/${id}`).then((data) => {
             setActivityText(data.instructionText);
         });
     };

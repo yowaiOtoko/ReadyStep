@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\Persistence\ManagerRegistry;
-use App\Entity\Session;
+use App\Entity\Task\Session;
 use App\Form\SessionType;
 
 #[Route('/', name: 'home_')]
