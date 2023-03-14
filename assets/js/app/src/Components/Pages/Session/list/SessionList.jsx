@@ -4,13 +4,14 @@ import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import { Btn, H4 } from '../../../../AbstractElements';
 import { get, del, post } from '../../../../_helper/utils.js';
-import DeleteModal from './DeleteModal';
+import { useNavigate } from 'react-router';
 // import { dummytabledata, tableColumns } from '../../../../Data/Table/Defaultdata';
 
-const ActivityList = () => {
+const SessionList = () => {
     const [selectedRows, setSelectedRows] = useState([]);
     const [toggleDelete, setToggleDelete] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
+    const history = useNavigate();
 
     // const [data, setData] = useState(dummytabledata);
 
@@ -22,33 +23,36 @@ const ActivityList = () => {
     const [activities, setActivities] = useState([]);
 
     useEffect(() => {
-        get('activities').then((data) => {
+        get('sessions').then((data) => {
         console.log(data);
         setActivities(data['hydra:member']);
         });
     }, []);
 
-    const onNewSession = (sessionId) => {
-        post(`app/activity/${sessionId}/new-session`).then((data) => {
+    const onStartSession = (sessionId) => {
+        post(`app/session/${sessionId}/start`).then((data) => {
+            history(`/app/session/show/${sessionId}`);
             console.log(data);
         })
 
     }
 
-    const getRow = (activity) => {
+    const getRow = (session) => {
         return  {
             name: (
-            <Link to={`/app/activity/show/${activity.id}`}>
-                {activity.name}
+            <Link to={`/app/session/show/${session.id}`}>
+                {session.name}
             </Link>),
-            description: activity.description,
-            steps: activity.tasks?.length ? activity.tasks.length : '-',
-            date: activity.createdAt,
-            by: activity.createdBy,
+            description: session.description,
+            steps: session.tasks?.length ? session.tasks.length : '-',
+            date: session.createdAt,
+            by: session.createdBy,
             actions: (
                 <div className="d-flex justify-content-center">
-                    <Button onClick={() => onNewSession(activity.id)} className="btn btn-sm btn-primary me-2 ">Commencer</Button>
-                    <Button color="danger" outline onClick={()=> { setDeleteId(activity.id); setToggleDelete(true)}} className="btn btn-sm">Supp</Button>
+                    <Button onClick={() => onStartSession(session.id)} className="btn btn-sm btn-primary me-2 ">
+                        { session.isPaused ? 'Reprendre' : 'Commencer'}
+                    </Button>
+                    <Button color="danger" outline onClick={()=> { setDeleteId(session.id); setToggleDelete(true)}} className="btn btn-sm">Supp</Button>
                 </div>
             ),
 
@@ -126,13 +130,8 @@ const ActivityList = () => {
                 onSelectedRowsChange={handleRowSelected}
                 clearSelectedRows={toggleDelete}
             />
-            <DeleteModal
-                onDelete={onDelete}
-                isOpen={toggleDelete}
-                toggler={() => setToggleDelete(!toggleDelete)}
 
-                />
         </Fragment>
     )
 }
-export default ActivityList
+export default SessionList

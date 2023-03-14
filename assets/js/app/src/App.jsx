@@ -27,12 +27,12 @@ const App = () => (
   <div className='App'>
 
     <CustomizerProvider>
-      <FaqProvider>
+      {/*<FaqProvider>
         <LearningProvider>
           <JobSearchProvider>
             <WishListProvider>
               <FilterProvider>
-                {/* <CartProvider>
+                 <CartProvider>
                   <ProductProvider>
                     <SearchResultProvider>
                       <EmailProvider>
@@ -65,12 +65,12 @@ const App = () => (
                       </EmailProvider>
                     </SearchResultProvider>
                   </ProductProvider>
-                </CartProvider>*/}
+                </CartProvider>
               </FilterProvider>
             </WishListProvider>
           </JobSearchProvider>
         </LearningProvider>
-      </FaqProvider>
+      </FaqProvider>*/}
     </CustomizerProvider>
   </div>
 );

@@ -47,11 +47,27 @@ class Session
     #[ORM\Column(options: ["default" => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\Column(nullable: true)]
+    private array $state = [];
+
+    #[ORM\Column]
+    private bool $isPaused = false;
+
+    #[ORM\Column]
+    private bool $isLocked = false;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $startedAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $endedAt = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->sessionTasks = new ArrayCollection();
         $this->userTasks = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -169,6 +185,66 @@ class Session
     public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getState(): array
+    {
+        return $this->state;
+    }
+
+    public function setState(?array $state): self
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    public function isIsPaused(): bool
+    {
+        return $this->isPaused;
+    }
+
+    public function setIsPaused(bool $isPaused): self
+    {
+        $this->isPaused = $isPaused;
+
+        return $this;
+    }
+
+    public function isIsLocked(): bool
+    {
+        return $this->isLocked;
+    }
+
+    public function setIsLocked(bool $isLocked): self
+    {
+        $this->isLocked = $isLocked;
+
+        return $this;
+    }
+
+    public function getStartedAt(): ?\DateTimeImmutable
+    {
+        return $this->startedAt;
+    }
+
+    public function setStartedAt(?\DateTimeImmutable $startedAt): self
+    {
+        $this->startedAt = $startedAt;
+
+        return $this;
+    }
+
+    public function getEndedAt(): ?\DateTimeImmutable
+    {
+        return $this->endedAt;
+    }
+
+    public function setEndedAt(?\DateTimeImmutable $endedAt): self
+    {
+        $this->endedAt = $endedAt;
 
         return $this;
     }

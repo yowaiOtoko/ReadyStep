@@ -1,10 +1,18 @@
 
 const host = 'http://localhost:8001/api';
-export const get = (url) => {
+export const get = (url, extractHydra = true) => {
 
-  return fetch(`${host}/${url}`).then((response) => {
+  const response = fetch(`${host}/${url}`).then((response) => {
     return response.json();
   })
+
+  if(extractHydra) {
+    response.then((data) => {
+      return data['hydra:member'];
+    })
+  }
+
+  return response;
 
 
 };

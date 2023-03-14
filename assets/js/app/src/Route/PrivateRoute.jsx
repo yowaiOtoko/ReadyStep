@@ -16,6 +16,7 @@ const PrivateRoute = () => {
     localStorage.setItem('login', login);
   }, []);
 
+  // return <Navigate exact to={'app/activity/list'} />;
   return  <Outlet /> ;
   // return login || authenticated || jwt_token ? <Outlet /> : <Navigate exact to={`${process.env.PUBLIC_URL}/login`} />;
 };

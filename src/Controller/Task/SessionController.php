@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller;
+namespace App\Controller\Task;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,8 +12,12 @@ use App\Entity\User;
 use App\Form\TaskType;
 use App\Entity\Task\Task;
 use App\Entity\UserTask;
+use App\Repository\Task\ActivityRepository;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Serializer;
 
-#[Route('/session', name: 'session_')]
+#[Route('/app/session', name: 'app_session_')]
 class SessionController extends AbstractController
 {
     #[Route('/{sessionName}/dashboard', name: 'show')]
