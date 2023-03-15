@@ -48,11 +48,15 @@ class Task
     #[ApiProperty(readableLink: true)]
     private Collection $tasks;
 
+    #[ORM\OneToMany(mappedBy: 'task', targetEntity: SessionUserTask::class, orphanRemoval: true)]
+    private Collection $sessionUserTasks;
+
     public function __construct()
     {
         $this->userTasks = new ArrayCollection;
         $this->sessionTasks = new ArrayCollection();
         $this->tasks = new ArrayCollection();
+        $this->sessionUserTasks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -162,6 +166,36 @@ class Task
             // set the owning side to null (unless already changed)
             if ($task->getParentTask() === $this) {
                 $task->setParentTask(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SessionUserTask>
+     */
+    public function getSessionUserTasks(): Collection
+    {
+        return $this->sessionUserTasks;
+    }
+
+    public function addSessionUserTask(SessionUserTask $sessionUserTask): self
+    {
+        if (!$this->sessionUserTasks->contains($sessionUserTask)) {
+            $this->sessionUserTasks->add($sessionUserTask);
+            $sessionUserTask->setTask($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSessionUserTask(SessionUserTask $sessionUserTask): self
+    {
+        if ($this->sessionUserTasks->removeElement($sessionUserTask)) {
+            // set the owning side to null (unless already changed)
+            if ($sessionUserTask->getTask() === $this) {
+                $sessionUserTask->setTask(null);
             }
         }
 

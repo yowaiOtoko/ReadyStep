@@ -62,12 +62,16 @@ class Session
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $endedAt = null;
 
+    #[ORM\OneToMany(mappedBy: 'session', targetEntity: SessionUserTask::class, orphanRemoval: true)]
+    private Collection $sessionUserTasks;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->sessionTasks = new ArrayCollection();
         $this->userTasks = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
+        $this->sessionUserTasks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -245,6 +249,36 @@ class Session
     public function setEndedAt(?\DateTimeImmutable $endedAt): self
     {
         $this->endedAt = $endedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SessionUserTask>
+     */
+    public function getSessionUserTasks(): Collection
+    {
+        return $this->sessionUserTasks;
+    }
+
+    public function addSessionUserTask(SessionUserTask $sessionUserTask): self
+    {
+        if (!$this->sessionUserTasks->contains($sessionUserTask)) {
+            $this->sessionUserTasks->add($sessionUserTask);
+            $sessionUserTask->setSession($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSessionUserTask(SessionUserTask $sessionUserTask): self
+    {
+        if ($this->sessionUserTasks->removeElement($sessionUserTask)) {
+            // set the owning side to null (unless already changed)
+            if ($sessionUserTask->getSession() === $this) {
+                $sessionUserTask->setSession(null);
+            }
+        }
 
         return $this;
     }

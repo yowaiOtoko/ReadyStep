@@ -2,26 +2,26 @@
 
 namespace App\Repository\Task;
 
-use App\Entity\Task\SessionTask;
+use App\Entity\Task\SessionUserTask;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<SessionTask>
+ * @extends ServiceEntityRepository<SessionUserTask>
  *
- * @method SessionTask|null find($id, $lockMode = null, $lockVersion = null)
- * @method SessionTask|null findOneBy(array $criteria, array $orderBy = null)
- * @method SessionTask[]    findAll()
- * @method SessionTask[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method SessionUserTask|null find($id, $lockMode = null, $lockVersion = null)
+ * @method SessionUserTask|null findOneBy(array $criteria, array $orderBy = null)
+ * @method SessionUserTask[]    findAll()
+ * @method SessionUserTask[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class SessionTaskRepository extends ServiceEntityRepository
+class SessionUserTaskRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, SessionTask::class);
+        parent::__construct($registry, SessionUserTask::class);
     }
 
-    public function save(SessionTask $entity, bool $flush = false): void
+    public function save(SessionUserTask $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class SessionTaskRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(SessionTask $entity, bool $flush = false): void
+    public function remove(SessionUserTask $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class SessionTaskRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return SessionTask[] Returns an array of SessionTask objects
+//     * @return SessionUserTask[] Returns an array of SessionUserTask objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class SessionTaskRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?SessionTask
+//    public function findOneBySomeField($value): ?SessionUserTask
 //    {
 //        return $this->createQueryBuilder('s')
 //            ->andWhere('s.exampleField = :val')

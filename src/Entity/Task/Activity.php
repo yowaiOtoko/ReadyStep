@@ -9,11 +9,10 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Task\ActivityMedia;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
-use App\Repository\Task\ActivityRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
-#[ORM\Entity(repositoryClass: ActivityRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'task_activity')]
 #[ApiResource(order: ['createdAt' => 'DESC'])]
 class Activity

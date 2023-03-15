@@ -4,6 +4,7 @@ namespace App\Entity;
 use App\Entity\Task\Session;
 use ApiPlatform\Metadata\Get;
 use App\Entity\Task\Activity;
+use App\Entity\Task\SessionUserTask;
 use App\Entity\Task\UserTask;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
@@ -43,10 +44,14 @@ class User
     #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: Activity::class, orphanRemoval: true)]
     private Collection $activities;
 
+    #[ORM\OneToMany(mappedBy: 'userr', targetEntity: SessionUserTask::class, orphanRemoval: true)]
+    private Collection $sessionUserTasks;
+
     public function __construct()
     {
         $this->userTasks = new ArrayCollection;
         $this->activities = new ArrayCollection();
+        $this->sessionUserTasks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -118,6 +123,36 @@ class User
             // set the owning side to null (unless already changed)
             if ($activity->getCreatedBy() === $this) {
                 $activity->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SessionUserTask>
+     */
+    public function getSessionUserTasks(): Collection
+    {
+        return $this->sessionUserTasks;
+    }
+
+    public function addSessionUserTask(SessionUserTask $sessionUserTask): self
+    {
+        if (!$this->sessionUserTasks->contains($sessionUserTask)) {
+            $this->sessionUserTasks->add($sessionUserTask);
+            $sessionUserTask->setUserr($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSessionUserTask(SessionUserTask $sessionUserTask): self
+    {
+        if ($this->sessionUserTasks->removeElement($sessionUserTask)) {
+            // set the owning side to null (unless already changed)
+            if ($sessionUserTask->getUserr() === $this) {
+                $sessionUserTask->setUserr(null);
             }
         }
 

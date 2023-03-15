@@ -5,10 +5,10 @@ namespace App\Entity\Task;
 use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Task\Session;
 use App\Entity\Task\Task;
-use App\Repository\Task\SessionTaskRepository;
+
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: SessionTaskRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'task_session_task')]
 #[ApiResource]
 class SessionTask
