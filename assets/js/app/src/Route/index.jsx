@@ -1,7 +1,7 @@
 import React from 'react';
 import { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import { configureFakeBackend, authHeader, handleResponse } from '../Services/fack.backend';
+// import { configureFakeBackend, authHeader, handleResponse } from '../Services/fack.backend';
 import Callback from '../Auth/Callback';
 import Loader from '../Layout/Loader';
 import LayoutRoutes from '../Route/LayoutRoutes';
@@ -9,6 +9,9 @@ import Signin from '../Auth/Signin';
 import PrivateRoute from './PrivateRoute';
 import { classes } from '../Data/Layouts';
 import { authRoutes } from './AuthRoutes';
+  // import { initializeApp } from "firebase/app";
+// import { connectAuthEmulator, getAuth, onAuthStateChanged } from "firebase/auth";
+import Login from '../Components/Pages/Auth/Login';
 
 // setup fake backend
 const Routers = () => {
@@ -18,17 +21,29 @@ const Routers = () => {
   const defaultLayoutObj = classes.find((item) => Object.values(item).pop(1) === 'compact-wrapper');
   const layout = localStorage.getItem('layout') || Object.keys(defaultLayoutObj).pop();
 
+console.log(process.env.REACT_APP_FIREBASE_API_KEY)
+
+// TODO: Replace the following with your app's Firebase project configuration
+// See: https://firebase.google.com/docs/web/learn-more#config-object
+// const firebaseConfig = {
+//   apiKey: process.env.REACT_APP_FIREBASE_API_KEY ,
+//   appId: process.env.REACT_APP_FIREBASE_APP_ID,
+//   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+// };
+
+// Initialize Firebase
+
+console.log('router index')
+
   useEffect(() => {
     let abortController = new AbortController();
-    const requestOptions = { method: 'GET', headers: authHeader() };
-    fetch('/users', requestOptions).then(handleResponse);
+    // const requestOptions = { method: 'GET', headers: authHeader() };
+    // fetch('/users', requestOptions).then(handleResponse);
 
-    setAuthenticated(JSON.parse(localStorage.getItem('authenticated')));
+    // setAuthenticated(JSON.parse(localStorage.getItem('authenticated')));
     console.ignoredYellowBox = ['Warning: Each', 'Warning: Failed'];
     console.disableYellowBox = true;
-    return () => {
-      abortController.abort();
-    };
+
   }, []);
 
   return (
@@ -38,19 +53,13 @@ const Routers = () => {
         <Suspense fallback={<Loader />}>
           <Routes>
             <Route path={'/'} element={<PrivateRoute />}>
-              {currentUser || authenticated || jwt_token ? (
-                <>
 
-                  <Route exact path={`${process.env.PUBLIC_URL}`} element={<Navigate to={`${process.env.PUBLIC_URL}/app/activity/list`} />} />
-                  <Route exact path={`/`} element={<Navigate to={`${process.env.PUBLIC_URL}/app/activity/list`} />} />
-                </>
-              ) : (
-                ''
-              )}
+              {/* <Route exact path={`/`} element={<Navigate to={`/app/activity/list`} />} /> */}
+
               <Route path={`/*`} element={<LayoutRoutes />} />
             </Route>
-            <Route path={`${process.env.PUBLIC_URL}/callback`} render={() => <Callback />} />
-            <Route exact path={`${process.env.PUBLIC_URL}/login`} element={<Signin />} />
+            <Route path={`callback`} render={() => <Callback />} />
+            <Route exact path={`login`} element={<Login />} />
             {authRoutes.map(({ path, Component }, i) => (
               <Route path={path} element={Component} key={i} />
             ))}

@@ -21,16 +21,17 @@ import ComingBgImg from '../Components/Pages/ComingSoon/ComingBgImg';
 import ComingBgVideo from '../Components/Pages/ComingSoon/ComingBgVideo';
 import Error500 from '../Components/Pages/ErrorPages/ErrorPage500';
 import Error503 from '../Components/Pages/ErrorPages/ErrorPage503';
+import Login from '../Components/Pages/Auth/Login';
 
 export const authRoutes = [
-  { path: `${process.env.PUBLIC_URL}/login`, Component: <Logins /> },
+  { path: `${process.env.PUBLIC_URL}/login`, Component: <Login /> },
   { path: `${process.env.PUBLIC_URL}/pages/authentication/login-simple/:layout`, Component: <LoginForm /> },
   { path: `${process.env.PUBLIC_URL}/pages/authentication/login-img/:layout`, Component: <LoginOne /> },
   { path: `${process.env.PUBLIC_URL}/pages/authentication/login-bg-img/:layout`, Component: <LoginTwo /> },
   { path: `${process.env.PUBLIC_URL}/pages/authentication/login-validation/:layout`, Component: <LoginValidation /> },
   { path: `${process.env.PUBLIC_URL}/pages/authentication/login-tooltip/:layout`, Component: <LoginTooltip /> },
   { path: `${process.env.PUBLIC_URL}/pages/authentication/login-sweetalert/:layout`, Component: <LoginSweetalert /> },
-  { path: `${process.env.PUBLIC_URL}/pages/authentication/register-simple/:layout`, Component: <RegisterSimple /> },
+  { path: `${process.env.PUBLIC_URL}/pages/authentication/register-simple`, Component: <RegisterSimple /> },
   { path: `${process.env.PUBLIC_URL}/pages/authentication/register-bg-img/:layout`, Component: <RegisterBgImg /> },
   { path: `${process.env.PUBLIC_URL}/pages/authentication/register-video/:layout`, Component: <RegisterVideo /> },
   { path: `${process.env.PUBLIC_URL}/pages/authentication/unlock-user/:layout`, Component: <UnlockUser /> },

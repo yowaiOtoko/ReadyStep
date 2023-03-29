@@ -32,9 +32,11 @@
     "date-fns": "^2.29.3",
     "deni-react-treeview": "^1.1.11",
     "dompurify": "^3.0.0",
+    "dotenv": "^16.0.3",
     "easymde": "^2.16.1",
     "emoji-mart": "^3.0.1",
     "feather-icons": "^4.29.0",
+    "firebase": "^9.18.0",
     "hast-to-hyperscript": "^10.0.0",
     "hast-util-to-html": "^8.0.4",
     "highlight.js": "^11.0.0",
@@ -160,7 +162,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint --fix --ext .js,.jsx .",
     "json-serve": "node public/server.js",
-    "dev": "concurrently \"react-scripts start\" \"node public/server.js\""
+    "dev": "concurrently \"react-scripts start\" \"node public/server.js\" \"firebase emulators:start\""
   },
   "resolutions": {
     "react-dev-utils": "10.0.0"

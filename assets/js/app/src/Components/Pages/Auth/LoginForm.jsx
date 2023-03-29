@@ -7,8 +7,15 @@ import { Facebook, Linkedin, Twitter } from 'react-feather';
 import logoWhite from '../../../assets/images/logo/logo.png';
 import logoDark from '../../../assets/images/logo/logo_dark.png';
 
-const LoginForm = ({ logoClassMain }) => {
+const LoginForm = ({ logoClassMain, onLogin }) => {
   const [togglePassword, setTogglePassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    onLogin({email, password});
+  };
   return (
     <Fragment>
       <div className='login-card'>
@@ -26,12 +33,18 @@ const LoginForm = ({ logoClassMain }) => {
               <P>Enter your email & password to login</P>
               <FormGroup>
                 <Label className='col-form-label m-0'>Email Address</Label>
-                <Input className='form-control' type='email' required placeholder='Test@gmail.com' />
+                <Input className='form-control' type='email' required placeholder='Test@gmail.com' onChange={ e => setEmail(e.target.value)}/>
               </FormGroup>
               <FormGroup className='position-relative'>
                 <Label className='col-form-label m-0'>Password</Label>
                 <div className='position-relative'>
-                  <Input className='form-control' type={togglePassword ? 'text' : 'password'} name='login[password]' required placeholder='*********' />
+                  <Input className='form-control'
+                    type={togglePassword ? 'text' : 'password'}
+                    name='login[password]'
+                    required
+                    placeholder='*********'
+                    onChange={ e => setPassword(e.target.value)}
+                    />
                   <div className='show-hide' onClick={() => setTogglePassword(!togglePassword)}>
                     <span className={togglePassword ? '' : 'show'}></span>
                   </div>
@@ -49,7 +62,7 @@ const LoginForm = ({ logoClassMain }) => {
                 </Link>
               </FormGroup>
               <FormGroup>
-                <Btn attrBtn={{ className: 'd-block w-100 mt-2', color: 'primary', type: 'submit' }}>Sign in</Btn>
+                <Btn attrBtn={{ className: 'd-block w-100 mt-2', color: 'primary', type: 'submit', onClick:onSubmit }}>Sign in</Btn>
               </FormGroup>
               <div className='login-social-title'>
                 <H6 attrH6={{ className: 'text-muted mt-4 or' }}>Or Sign in with</H6>

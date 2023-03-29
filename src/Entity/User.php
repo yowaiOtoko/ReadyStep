@@ -4,20 +4,25 @@ namespace App\Entity;
 use App\Entity\Task\Session;
 use ApiPlatform\Metadata\Get;
 use App\Entity\Task\Activity;
-use App\Entity\Task\SessionUserTask;
 use App\Entity\Task\UserTask;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Patch;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Task\SessionUserTask;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'app_user')]
 #[ApiResource(
     operations: [
         new Get(),
-        new GetCollection()
+        new GetCollection(),
+        new Post(),
+        new Patch()
     ],
     paginationEnabled: false,
 )]
@@ -28,8 +33,10 @@ class User
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false, unique: true)]
-    private ?string $name;
+    #[Assert\NotBlank(message: 'user.first_name.not_blank')]
+    #[Assert\Length(max: 50, maxMessage: 'user.first_name.max_length')]
+    #[ORM\Column(length: 255)]
+    private ?string $firstName;
 
     #[ORM\Column(type: 'json')]
     private $roles = [];
@@ -44,8 +51,21 @@ class User
     #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: Activity::class, orphanRemoval: true)]
     private Collection $activities;
 
-    #[ORM\OneToMany(mappedBy: 'userr', targetEntity: SessionUserTask::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: SessionUserTask::class, orphanRemoval: true)]
     private Collection $sessionUserTasks;
+
+    #[ORM\Column(length: 255)]
+    private ?string $firebaseuid = null;
+
+    #[Assert\NotBlank(message: 'user.email.not_blank')]
+    #[Assert\Email(message: 'user.email.invalid')]
+    #[ORM\Column(length: 255)]
+    private ?string $email = null;
+
+    #[Assert\NotBlank(message: 'user.last_name.not_blank')]
+    #[Assert\Length(max: 50, maxMessage: 'user.last_name.max_length')]
+    #[ORM\Column(length: 255)]
+    private ?string $lastName = null;
 
     public function __construct()
     {
@@ -59,14 +79,14 @@ class User
         return $this->id;
     }
 
-    public function getName(): string
+    public function getFirstName(): string
     {
-        return $this->name;
+        return $this->firstName;
     }
 
-    public function setName(string $name): self
+    public function setFirstName(string $firstName): self
     {
-        $this->name = $name;
+        $this->firstName = $firstName;
 
         return $this;
     }
@@ -155,6 +175,42 @@ class User
                 $sessionUserTask->setUserr(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFirebaseUid(): ?string
+    {
+        return $this->firebaseuid;
+    }
+
+    public function setFirebaseUid(string $firebaseuid): self
+    {
+        $this->firebaseuid = $firebaseuid;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
 
         return $this;
     }

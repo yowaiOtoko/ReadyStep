@@ -1,5 +1,8 @@
 
-const host = 'http://localhost:8001/api';
+const host = 'http://localhost:8000/api';
+
+const prependSlash = (url) => { return url.charAt(0) === '/' ? url : `/${url}`; }
+
 export const get = (url, extractHydra = true) => {
 
   const response = fetch(`${host}/${url}`).then((response) => {
@@ -26,7 +29,7 @@ export const post = async (url, data, options) =>  {
     },
     body: JSON.stringify(data)
   };
-  const response = await fetch(`${host}/${url}`,  {...defaultOptions, ...options});
+  const response = await fetch(`${host}${prependSlash(url)}`,  {...defaultOptions, ...options});
 
   const resData = await response.json();
 

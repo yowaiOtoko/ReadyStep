@@ -48,6 +48,9 @@
             "migrations/.gitignore"
         ]
     },
+    "kreait/firebase-bundle": {
+        "version": "5.0.0"
+    },
     "nelmio/cors-bundle": {
         "version": "2.2",
         "recipe": {

@@ -22,6 +22,7 @@ import LearningProvider from './_helper/Learning/LearningProvider';
 import FaqProvider from './_helper/Faq/FaqProvider';
 import AnimationThemeProvider from './_helper/AnimationTheme/AnimationThemeProvider';
 import CustomizerProvider from './_helper/Customizer/CustomizerProvider';
+import { AuthProvider } from './Auth/AuthProvider';
 
 const App = () => (
   <div className='App'>
@@ -47,10 +48,11 @@ const App = () => (
                                         <GoogleChartProvider>
                                           <ChartjsProvider>
                                             <ChartistProvider>*/}
+                                            <AuthProvider>
                                               <AnimationThemeProvider>
                                                 <Routers />
-
                                               </AnimationThemeProvider>
+                                            </AuthProvider>
                                             {/* </ChartistProvider>
                                           </ChartjsProvider>
                                         </GoogleChartProvider>

@@ -9,6 +9,8 @@ import man from '../../../assets/images/dashboard/profile.png';
 import { handleResponse } from '../../../Services/fack.backend';
 
 import CustomizerContext from '../../../_helper/Customizer';
+
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import OtherWay from './OtherWay';
 
 const LoginTab = ({ selected }) => {
@@ -27,16 +29,34 @@ const LoginTab = ({ selected }) => {
     localStorage.setItem('Name', 'Emay Walter');
   }, [value, name]);
 
-  const loginAuth = async (e) => {
-    e.preventDefault();
-    // setLoading(true);
-    setValue(man);
-    setName('Emay Walter');
-    if (email !== '' && password !== '') {
-      localStorage.setItem('login', JSON.stringify(true));
-      history(`${process.env.PUBLIC_URL}/pages/sample-page/${layoutURL}`);
-    }
-  };
+  // const loginAuth = async (e) => {
+  //   e.preventDefault();
+  //   // setLoading(true);
+  //   setValue(man);
+  //   setName('Emay Walter');
+  //   if (email !== '' && password !== '') {
+  //     localStorage.setItem('login', JSON.stringify(true));
+  //     history(`${process.env.PUBLIC_URL}/pages/sample-page/${layoutURL}`);
+  //   }
+  // };
+
+  const  loginAuth = async (e) => {
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Signed in
+      const user = userCredential.user;
+      console.log(user)
+      // ...
+    })
+    .catch((error) => {
+      console.log(error)
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // ..
+    });
+
+  }
 
   const loginWithJwt = (e) => {
     const requestOptions = {
@@ -56,6 +76,7 @@ const LoginTab = ({ selected }) => {
         return user;
       });
   };
+
 
   return (
     <Fragment>

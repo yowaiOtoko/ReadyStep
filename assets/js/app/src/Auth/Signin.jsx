@@ -22,9 +22,9 @@ const Logins = () => {
                 <TabPane className='fade show' tabId={selected === 'simpleLogin' ? 'simpleLogin' : 'jwt'}>
                   <LoginTab selected={selected} />
                 </TabPane>
-                <TabPane className='fade show' tabId='auth0'>
+                {/* <TabPane className='fade show' tabId='auth0'>
                   <AuthTab />
-                </TabPane>
+                </TabPane> */}
               </TabContent>
             </div>
           </div>

@@ -6,8 +6,23 @@ import { Link } from 'react-router-dom';
 import logoWhite from '../../../assets/images/logo/logo.png';
 import logoDark from '../../../assets/images/logo/logo_dark.png';
 
-const RegisterFrom = ({ logoClassMain }) => {
+const RegisterFrom = ({ logoClassMain, onCreateUser }) => {
   const [togglePassword, setTogglePassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    console.log('onsubmit')
+    onCreateUser(email, password, firstName, lastName);
+
+  }
+
+
   return (
     <Fragment>
       <div className='login-card'>
@@ -26,21 +41,27 @@ const RegisterFrom = ({ logoClassMain }) => {
                 <Label className='col-form-label m-0 pt-0'>Your Name</Label>
                 <Row className='g-2'>
                   <Col xs='6'>
-                    <Input className='form-control' type='text' required='' placeholder='Fist Name' />
+                    <Input className='form-control' type='text' required='' placeholder='Fist Name' onChange={e => setFirstName(e.target.value)} />
                   </Col>
                   <Col xs='6'>
-                    <Input className='form-control' type='email' required='' placeholder='Last Name' />
+                    <Input className='form-control' type='email' required='' placeholder='Last Name' onChange={e => setLastName(e.target.value)}/>
                   </Col>
                 </Row>
               </FormGroup>
               <FormGroup>
                 <Label className='col-form-label m-0 pt-0'>Email Address</Label>
-                <Input className='form-control' type='email' required='' placeholder='Test@gmail.com' />
+                <Input className='form-control' type='email' required=''  onChange={e => setEmail(e.target.value)} />
               </FormGroup>
               <FormGroup className='position-relative'>
                 <Label className='col-form-label m-0 pt-0'>Password</Label>
                 <div className='position-relative'>
-                  <Input className='form-control' type={togglePassword ? 'text' : 'password'} name='login[password]' required placeholder='*********' />
+                  <Input className='form-control'
+                    type={togglePassword ? 'text' : 'password'}
+                    name='login[password]'
+                    required
+                    placeholder='*********'
+                    onChange={e => setPassword(e.target.value)}
+                  />
                   <div className='show-hide' onClick={() => setTogglePassword(!togglePassword)}>
                     <span className={togglePassword ? '' : 'show'}></span>
                   </div>
@@ -55,7 +76,7 @@ const RegisterFrom = ({ logoClassMain }) => {
                 </div>
               </FormGroup>
               <FormGroup>
-                <Btn attrBtn={{ className: 'd-block w-100', color: 'primary', type: 'submit' }}>Create Account</Btn>
+                <Btn attrBtn={{ className: 'd-block w-100', color: 'primary', type: 'submit', onClick:onSubmit}} >Create Account</Btn>
               </FormGroup>
               <div className='login-social-title'>
                 <H6 attrH6={{ className: 'text-muted or mt-4' }}>Or Sign up with</H6>
