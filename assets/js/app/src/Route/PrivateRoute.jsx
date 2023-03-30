@@ -5,7 +5,9 @@ import { Navigate, Outlet } from 'react-router-dom';
 const PrivateRoute = () => {
   const login = useState(JSON.parse(localStorage.getItem('login')))[0];
   const [authenticated, setAuthenticated] = useState(false);
-  const jwt_token = localStorage.getItem('token');
+  const jwt_token = JSON.parse(localStorage.getItem('token'));
+
+
 
   useEffect(() => {
     // const requestOptions = { method: 'GET', headers: authHeader() };

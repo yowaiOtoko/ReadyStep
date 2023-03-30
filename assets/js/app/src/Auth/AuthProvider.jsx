@@ -6,7 +6,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useLocalStorage("user", null);
-  const [token, setToken] = useLocalStorage("token", null);
+  const [token, setToken] = useLocalStorage("token", '');
 
 
   // call this function when you want to authenticate the user
