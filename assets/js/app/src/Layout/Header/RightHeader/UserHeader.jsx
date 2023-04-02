@@ -6,6 +6,7 @@ import man from '../../../assets/images/dashboard/profile.png';
 import { LI, UL, Image, P } from '../../../AbstractElements';
 import CustomizerContext from '../../../_helper/Customizer';
 import { Account, Admin, Inbox, LogOut, Taskboard } from '../../../Constant';
+import { useAuth } from '../../../Auth/AuthProvider';
 
 const UserHeader = () => {
   const history = useNavigate();
@@ -14,6 +15,8 @@ const UserHeader = () => {
   const { layoutURL } = useContext(CustomizerContext);
   const authenticated = JSON.parse(localStorage.getItem('authenticated'));
   const auth0_profile = JSON.parse(localStorage.getItem('auth0_profile'));
+
+  const {user} = useAuth();
 
   useEffect(() => {
     setProfile(localStorage.getItem('profileURL') || man);
@@ -44,7 +47,7 @@ const UserHeader = () => {
           }}
         />
         <div className='media-body'>
-          <span>{authenticated ? auth0_profile.name : name}</span>
+          <span>{user.firstName}</span>
           <P attrPara={{ className: 'mb-0 font-roboto' }}>
             {Admin} <i className='middle fa fa-angle-down'></i>
           </P>

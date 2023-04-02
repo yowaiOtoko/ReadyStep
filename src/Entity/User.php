@@ -12,10 +12,13 @@ use App\Entity\Task\SessionUserTask;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use Doctrine\Common\Collections\Collection;
+use phpDocumentor\Reflection\Types\Nullable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity]
+#[UniqueEntity('email')]
 #[ORM\Table(name: 'app_user')]
 #[ApiResource(
     operations: [
@@ -54,7 +57,7 @@ class User
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: SessionUserTask::class, orphanRemoval: true)]
     private Collection $sessionUserTasks;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $firebaseuid = null;
 
     #[Assert\NotBlank(message: 'user.email.not_blank')]

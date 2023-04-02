@@ -20,7 +20,6 @@ const RightHeader = () => {
           <Searchbar />
           <BookmarkHeader />
           <MoonLight />
-          <CartHeader />
           <Notificationbar />
           <UserHeader />
         </UL>

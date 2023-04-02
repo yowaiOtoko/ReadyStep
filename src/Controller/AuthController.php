@@ -81,8 +81,16 @@ class AuthController extends AbstractController
         $firstName = $payload->firstName;
         $lastName = $payload->lastName;
 
+        $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
+        if($user && $user->getFirebaseUid()){
+            return new JsonResponse(['error' => 'User already exists'], 400);
+        }
+
+        if(!$user){
+            $user = new User();
+        }
+
         // Validate user entity
-        $user = new User();
         $user->setEmail($email);
         $user->setFirstName($firstName);
         $user->setLastName($lastName);
