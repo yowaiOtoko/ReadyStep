@@ -49,11 +49,15 @@ class Activity
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $instructionText = null;
 
+    #[ORM\OneToMany(mappedBy: 'activity', targetEntity: Session::class)]
+    private Collection $sessions;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->files = new ArrayCollection();
+        $this->sessions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -194,6 +198,37 @@ class Activity
     #[ApiProperty()]
     public function getCreatorName(): ?string
     {
-        return $this->createdBy ? $this->createdBy->getName() : null;
+        return $this->createdBy ? $this->createdBy->getFullName() : null;
     }
+
+    /**
+     * @return Collection<int, Session>
+     */
+    public function getSessions(): Collection
+    {
+        return $this->sessions;
+    }
+
+    public function addSession(Session $session): self
+    {
+        if (!$this->sessions->contains($session)) {
+            $this->sessions->add($session);
+            $session->setActivity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSession(Session $session): self
+    {
+        if ($this->sessions->removeElement($session)) {
+            // set the owning side to null (unless already changed)
+            if ($session->getActivity() === $this) {
+                $session->setActivity(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

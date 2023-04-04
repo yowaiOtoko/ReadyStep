@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form';
 import { Container, Row, Col, Card, CardBody, Form, CardHeader } from 'reactstrap';
 import CustomizerContext from '../../../../_helper/Customizer';
 import { post } from "../../../../_helper/utils";
+import { useHttp } from "../../../../_helper/http/useHttp";
 
 const ActivityEdit = () => {
 
@@ -23,6 +24,8 @@ const ActivityEdit = () => {
         formState: { errors },
     } = useForm();
 
+    const http = useHttp();
+
     const history = useNavigate();
 
 
@@ -31,9 +34,9 @@ const ActivityEdit = () => {
         if (data !== '') {
 
 
-            post('activities', data).then(data => {
+            http.post('/api/activities', data).then(data => {
                 console.log(data)
-                history(`/app/activity/list`);
+                history(`activity/list`);
             })
             console.log(data)
             //project.addNewProject(data);

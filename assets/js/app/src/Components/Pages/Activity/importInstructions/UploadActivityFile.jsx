@@ -3,15 +3,17 @@ import { Col, FormGroup, Label, Row } from 'reactstrap';
 import Dropzone from 'react-dropzone-uploader';
 import { get } from '../../../../_helper/utils';
 import Highlightable from 'highlightable';
+import { useHttp } from '../../../../_helper/http/useHttp';
 
 const UploadActivityFile = ({activityId, onResponse}) => {
   const [ranges, setRanges] = useState([]);
+  const http = useHttp();
 
   const getUploadParams = ({ file, meta }) => {
     console.log('getUploadParams');
     const body = new FormData()
     body.append('file', file)
-    return { url: `http://localhost:8001/api/task-lists/${activityId}/import`, body }
+    return { url: `${http.getBaseUrl()}/api/task-lists/${activityId}/import?bearer=${http.getToken()}`, body }
   };
 
 

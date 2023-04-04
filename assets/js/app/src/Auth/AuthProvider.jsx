@@ -1,17 +1,21 @@
 import { createContext, useContext, useMemo } from "react";
 import { redirect } from "react-router-dom";
-import { post } from "../_helper/utils";
+
 import { useLocalStorage } from "./useLocalStorage";
+import { jwtConfig } from "../_helper/auth/jwtConfig";
+import { useHttp } from "../_helper/http/useHttp";
+import { parseJwt } from "../_helper/utils";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useLocalStorage("user", {});
-  const [token, setToken] = useLocalStorage("token", '');
+  const [user, setUser] = useLocalStorage(jwtConfig.tokenUserKeyName, {});
+  const [token, setToken] = useLocalStorage(jwtConfig.storageTokenKeyName, '');
+  const http = useHttp();
 
 
   // call this function when you want to authenticate the user
   const login = async ({email, password}) => {
-    return post('/login', {
+    return http.post('/login', {
       email,
       password
     }).then(
@@ -36,7 +40,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async ({firstName, lastName, email, password}) => {
-    return post('/signup', {
+    return http.post('/signup', {
       firstName,
       lastName,
       email,
@@ -57,15 +61,37 @@ export const AuthProvider = ({ children }) => {
     )
   }
 
+  const isLogged = () => {
+    const isExpired = Date.now() >= user.exp * 1000;
+    return !!user && !isExpired;
+  }
+
+  const isStudent = () => {
+
+    const token = parseJwt(localStorage.getItem(jwtConfig.storageTokenKeyName));
+    console.log(parseJwt(token));
+    const roles = token ? token.roles : [];
+    return roles.includes('ROLE_STUDENT');
+  }
+
+  const isTeacher = () => {
+
+    const token = parseJwt(localStorage.getItem(jwtConfig.storageTokenKeyName));
+    const roles = token ? token.roles : [];
+    return roles.includes('ROLE_TEACHER');
+  }
 
   const value = useMemo(
     () => ({
       user,
       login,
       logout,
-      register
+      register,
+      isLogged,
+      isStudent,
+      isTeacher
     }),
-    [user]
+    [user, token]
   );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 

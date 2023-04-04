@@ -16,6 +16,7 @@ use phpDocumentor\Reflection\Types\Nullable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity]
 #[UniqueEntity('email')]
@@ -29,8 +30,14 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
     ],
     paginationEnabled: false,
 )]
-class User
+class User implements UserInterface
 {
+
+    const ROLE_USER = 'ROLE_USER';
+    const ROLE_ADMIN = 'ROLE_ADMIN';
+    const ROLE_TEACHER = 'ROLE_TEACHER';
+    const ROLE_STUDENT = 'ROLE_STUDENT';
+
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column]
@@ -89,7 +96,7 @@ class User
 
     public function setFirstName(string $firstName): self
     {
-        $this->firstName = $firstName;
+        $this->firstName = ucfirst(strtolower($firstName));
 
         return $this;
     }
@@ -118,6 +125,15 @@ class User
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function addRole(string $role): self
+    {
+        if(!in_array($role, $this->roles)){
+            $this->roles[] = $role;
+        }
 
         return $this;
     }
@@ -213,8 +229,24 @@ class User
 
     public function setLastName(string $lastName): self
     {
-        $this->lastName = $lastName;
+        $this->lastName = strtoupper($lastName);
 
         return $this;
+    }
+
+    public function getFullName(): string
+    {
+        return $this->firstName . ' ' . $this->lastName;
+    }
+
+    public function eraseCredentials()
+    {}
+
+    /**
+     * Returns the identifier for this user (e.g. username or email address).
+     */
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
     }
 }

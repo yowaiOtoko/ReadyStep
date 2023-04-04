@@ -19,6 +19,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
 class AuthController extends AbstractController
 {
@@ -29,9 +30,9 @@ class AuthController extends AbstractController
     }
 
     /**
-     * @Route("/api/login", name="api_login", methods={"POST"})
+     * @Route("/login", name="api_login", methods={"POST"})
      */
-    public function login(Auth $auth, Request $request): JsonResponse
+    public function login(Auth $auth, Request $request, JWTTokenManagerInterface $jwtManager): JsonResponse
     {
         try{
 
@@ -51,6 +52,9 @@ class AuthController extends AbstractController
                 $this->em->flush();
             }
 
+            // $idToken = $auth->createCustomToken($signInResult->firebaseUserId(), $user->getRoles());
+            $token = $jwtManager->create($user);
+
 
         } catch (FailedToSignIn $e){
             $this->logger->error($e->getMessage(), ['exception' => $e]);
@@ -59,7 +63,7 @@ class AuthController extends AbstractController
             $this->logger->error($e->getMessage(), ['exception' => $e]);
             return new JsonResponse(['success' => false], 400);
         }
-        return $this->getLoginSuceessResponse($signInResult->idToken(), $user);
+        return $this->getLoginSuccessResponse($token, $user);
     }
 
 
@@ -71,7 +75,9 @@ class AuthController extends AbstractController
         ValidatorInterface $validator,
         Request $request,
         EntityManagerInterface $em,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        JWTTokenManagerInterface $jwtManager
+
     ): JsonResponse
     {
         $payload = json_decode($request->getContent(), false);
@@ -87,13 +93,17 @@ class AuthController extends AbstractController
         }
 
         if(!$user){
-            $user = new User();
+            $user = (new User())
+                ->addRole(User::ROLE_STUDENT)
+            ;
         }
 
-        // Validate user entity
-        $user->setEmail($email);
-        $user->setFirstName($firstName);
-        $user->setLastName($lastName);
+        /** @var User */
+        $user->setEmail($email)
+            ->setFirstName($firstName)
+            ->setLastName($lastName)
+        ;
+
 
         $errors = $validator->validate($user);
         if (count($errors) > 0) {
@@ -117,9 +127,10 @@ class AuthController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            $idToken = $auth->createCustomToken($createdUser->uid);
+            //$idToken = $auth->createCustomToken($createdUser->uid, $user->getRoles());
+            $token = $jwtManager->create($user);
 
-            return $this->getLoginSuceessResponse($idToken->toString(), $user);
+            return $this->getLoginSuccessResponse($token, $user);
         } catch (AuthException|FirebaseException $e){
             $this->logger->error($e->getMessage(), ['exception' => $e]);
             return new JsonResponse(['error' => $e->getMessage()], 400);
@@ -129,7 +140,7 @@ class AuthController extends AbstractController
         }
     }
 
-    private function getLoginSuceessResponse(string $token, User $user): JsonResponse
+    private function getLoginSuccessResponse(string $token, User $user): JsonResponse
     {
         return new JsonResponse([
             'success' => true,
@@ -140,6 +151,7 @@ class AuthController extends AbstractController
                     'firstName' => $user->getFirstName(),
                     'lastName' => $user->getLastName(),
                     'email' => $user->getEmail(),
+                    'roles' => $user->getRoles(),
                 ]
             ]
         ]);

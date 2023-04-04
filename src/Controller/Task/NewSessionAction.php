@@ -3,16 +3,16 @@
 namespace App\Controller\Task;
 
 use App\Entity\Task\Session;
-use App\Repository\Task\ActivityRepository;
+use App\Entity\Task\Activity;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 #[AsController]
 #[Route('api/app/activity/{activityId}/new-session', name: 'app_activity_new_session', methods: ['POST'])]
@@ -20,13 +20,13 @@ class NewSessionAction extends AbstractController
 {
 
     public function __invoke(
-        ActivityRepository $activityRepo,
         NormalizerInterface $serializer,
         EntityManagerInterface $em,
         int $activityId,
     ): JsonResponse
     {
-        $activity = $activityRepo->find($activityId);
+        /** @var Activity */
+        $activity = $em->getRepository(Activity::class)->find($activityId);
         if(!$activity){
             throw new BadRequestException('Activity not found');
         }
@@ -38,6 +38,8 @@ class NewSessionAction extends AbstractController
             ->setState($data)
             ->setCreatedAt(new \DateTimeImmutable())
             ->setIsPaused(false)
+            ->setDescription($activity->getDescription())
+            ->setActivity($activity)
         ;
 
         $em->persist($session);

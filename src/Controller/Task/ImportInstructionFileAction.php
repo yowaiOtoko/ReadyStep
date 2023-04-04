@@ -45,6 +45,8 @@ final class ImportInstructionFileAction extends AbstractController
 
         $activity->setInstructionText($content);
 
+
+
         $em->persist($activity);
         $em->flush();
 

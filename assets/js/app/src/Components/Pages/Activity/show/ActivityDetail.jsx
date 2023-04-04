@@ -5,13 +5,15 @@ import { Link, useParams } from "react-router-dom";
 import { get } from "../../../../_helper/utils";
 import { Task } from "./Task";
 import { TaskGroup } from "./TaskGroup";
+import { useHttp } from "../../../../_helper/http/useHttp";
 
 const ActivityDetail = () => {
     let { id } = useParams();
     const [activity, setActivity] = useState();
+    const http = useHttp();
 
     useEffect(() => {
-        get(`activities/${id}`).then((data) => {
+        http.get(`/api/activities/${id}`).then((data) => {
             console.log(data);
             setActivity(data);
         });
@@ -40,7 +42,7 @@ const ActivityDetail = () => {
                                     <div>
                                         <Link
                                             className="btn btn-primary"
-                                            to={`/app/activity/import/${activity.id}`}>
+                                            to={`/teach/activity/import/${activity.id}`}>
                                             Importer un fichier
                                         </Link>
                                     </div>

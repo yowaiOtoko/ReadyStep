@@ -85,6 +85,8 @@ class AddUserCommand extends Command
             ->addArgument('first-name', InputArgument::OPTIONAL, '')
             ->addArgument('last-name', InputArgument::OPTIONAL, '')
             ->addOption('admin', null, InputOption::VALUE_NONE, 'If set, the user is created as an administrator')
+            ->addOption('teacher', null, InputOption::VALUE_NONE, 'If set, the user is created as an teacher')
+            ->addOption('student', null, InputOption::VALUE_NONE, 'If set, the user is created as an student')
         ;
     }
 
@@ -191,6 +193,8 @@ class AddUserCommand extends Command
 
         $email = $input->getArgument('email');
         $isAdmin = $input->getOption('admin');
+        $isTeacher = $input->getOption('teacher');
+        $isStudent = $input->getOption('student');
 
         // make sure to validate the user data is correct
         //$this->validateUserData($username, $plainPassword, $email, $fullName);
@@ -203,7 +207,17 @@ class AddUserCommand extends Command
         $user->setFirstName($firstName);
         $user->setLastName($lastName);
         $user->setEmail($email);
-        $user->setRoles([$isAdmin ? 'ROLE_ADMIN' : 'ROLE_USER']);
+        $roles = [];
+        if($isTeacher){
+            $roles[] = User::ROLE_TEACHER;
+        }
+        if($isStudent){
+            $roles[] = User::ROLE_STUDENT;
+        }
+        if($isAdmin){
+            $roles[] = User::ROLE_ADMIN;
+        }
+        $user->setRoles($roles);
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();

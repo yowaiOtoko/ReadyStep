@@ -12,6 +12,11 @@ import { authRoutes } from './AuthRoutes';
   // import { initializeApp } from "firebase/app";
 // import { connectAuthEmulator, getAuth, onAuthStateChanged } from "firebase/auth";
 import Login from '../Components/Pages/Auth/Login';
+import LearnRoute from './StudentRoute';
+import { routes } from './Routes';
+import { teachRoutes } from './teachRoutes';
+import TeachRoute from './TeachRoute';
+import { studentRoutes } from './studentRoutes';
 
 // setup fake backend
 const Routers = () => {
@@ -56,8 +61,16 @@ console.log('router index')
 
               {/* <Route exact path={`/`} element={<Navigate to={`/app/activity/list`} />} /> */}
 
-              <Route path={`/*`} element={<LayoutRoutes />} />
+              <Route path={'/teach'} element={<TeachRoute />}>
+                <Route path={`*`} element={<LayoutRoutes routes={teachRoutes}/>} />
+              </Route>
+              <Route path={'/learn'} element={<LearnRoute />}>
+                <Route path={`*`} element={<LayoutRoutes routes={studentRoutes}/>} />
+              </Route>
+
+              {/* <Route path={`/*`} element={<LayoutRoutes routes={routes} />} /> */}
             </Route>
+
             <Route path={`callback`} render={() => <Callback />} />
             <Route exact path={`login`} element={<Login />} />
             {authRoutes.map(({ path, Component }, i) => (

@@ -1,16 +1,30 @@
-import React, { Fragment } from "react";
+
+import React, { Fragment, useEffect, useState } from "react";
 import { PlusCircle } from "react-feather";
 import { Link } from "react-router-dom";
 import { Container, Row, Col, Card, CardBody, CardHeader } from "reactstrap";
 import { Breadcrumbs, P } from "../../../AbstractElements";
 import { SampleCard } from "../../../Constant";
-import ActivityList from "./list/ActivityList";
+import { get } from "../../../_helper/utils";
+import { SessionCard } from "../Session/show/components/SessionCard";
 
-const Activity = () => {
+export const StudentDashboard = () => {
+
+    const [sessions, setSessions] = useState([]);
+
+    useEffect(() => {
+        get(`sessions`, {dateProperties: ['createdAt', 'startedAt']}).then((data) => {
+
+            setSessions(data)
+        });
+    }, []);
+
+    console.log(sessions);
+
     return (
         <Fragment>
             <Breadcrumbs
-                mainTitle="Activités"
+                mainTitle="Home"
             />
             <Container fluid={true}>
                 <Row>
@@ -36,7 +50,12 @@ const Activity = () => {
                                 </Row>
                             </CardHeader>
                             <CardBody>
-                                <ActivityList></ActivityList>
+                                <Row>
+                                    <Col sm='12'>
+                                        {sessions.map((session, index) => <SessionCard session={session} key={session.id}/>)}
+
+                                    </Col>
+                                </Row>
                             </CardBody>
                         </Card>
                     </Col>
@@ -44,6 +63,4 @@ const Activity = () => {
             </Container>
         </Fragment>
     );
-};
-
-export default Activity;
+}

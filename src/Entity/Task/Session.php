@@ -1,6 +1,7 @@
 <?php
 namespace App\Entity\Task;
 
+use ApiPlatform\Metadata\ApiProperty;
 use App\Entity\User;
 use App\Entity\Task\Task;
 use ApiPlatform\Metadata\Get;
@@ -65,6 +66,10 @@ class Session
     #[ORM\OneToMany(mappedBy: 'session', targetEntity: SessionUserTask::class, orphanRemoval: true)]
     private Collection $sessionUserTasks;
 
+    #[ORM\ManyToOne(inversedBy: 'sessions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Activity $activity = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -94,6 +99,12 @@ class Session
     public function getUsers(): Collection
     {
         return $this->users;
+    }
+
+    #[ApiProperty()]
+    public function getAuthor(): string
+    {
+        return $this->activity->getCreatedBy();
     }
 
     public function addUser(User $user): self
@@ -279,6 +290,18 @@ class Session
                 $sessionUserTask->setSession(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getActivity(): ?Activity
+    {
+        return $this->activity;
+    }
+
+    public function setActivity(?Activity $activity): self
+    {
+        $this->activity = $activity;
 
         return $this;
     }

@@ -7,22 +7,24 @@ import UploadActivityFile from "./UploadActivityFile";
 import { Editor } from "../../../Common/mdxEditor";
 import Preview from "./Preview";
 import TextSelector from "./TextSelector";
+import { useHttp } from "../../../../_helper/http/useHttp";
 
 const ImportInstructions = () => {
     let { id } = useParams();
     const [activity, setActivity] = useState();
     const [activityText, setActivityText] = useState();
     const [nodes, setNodes] = useState({});
+    const http = useHttp();
 
     useEffect(() => {
-        get(`activities/${id}`).then((data) => {
+        http.get(`/api/activities/${id}`).then((data) => {
             console.log(data);
             setActivity(data);
         });
     }, []);
 
     const onFileResponse = () => {
-        get(`activities/${id}`).then((data) => {
+        http.get(`/api/activities/${id}`).then((data) => {
             setActivityText(data.instructionText);
         });
     };
@@ -33,7 +35,7 @@ const ImportInstructions = () => {
     };
 
     const onSave = () => {
-        post(`task-lists/${id}/save`, nodes).then((data) => {
+        http.post(`/api/task-lists/${id}/save`, nodes).then((data) => {
             console.log(data);
         });
 

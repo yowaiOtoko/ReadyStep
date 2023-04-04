@@ -3,7 +3,9 @@ import DataTable from 'react-data-table-component';
 import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import { Btn, H4 } from '../../../../AbstractElements';
-import { get, del, post } from '../../../../_helper/utils.js';
+import { useHttp } from '../../../../_helper/http/useHttp';
+
+
 import DeleteModal from './DeleteModal';
 // import { dummytabledata, tableColumns } from '../../../../Data/Table/Defaultdata';
 
@@ -11,6 +13,7 @@ const ActivityList = () => {
     const [selectedRows, setSelectedRows] = useState([]);
     const [toggleDelete, setToggleDelete] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
+    const http = useHttp();
 
     // const [data, setData] = useState(dummytabledata);
 
@@ -22,14 +25,14 @@ const ActivityList = () => {
     const [activities, setActivities] = useState([]);
 
     useEffect(() => {
-        get('activities').then((data) => {
+        http.get('/api/activities').then((data) => {
         console.log(data);
-        setActivities(data['hydra:member']);
+        setActivities(data);
         });
     }, []);
 
     const onNewSession = (sessionId) => {
-        post(`app/activity/${sessionId}/new-session`).then((data) => {
+        http.post(`/app/activity/${sessionId}/new-session`).then((data) => {
             console.log(data);
         })
 
@@ -38,13 +41,13 @@ const ActivityList = () => {
     const getRow = (activity) => {
         return  {
             name: (
-            <Link to={`/app/activity/show/${activity.id}`}>
+            <Link to={`/teach/activity/show/${activity.id}`}>
                 {activity.name}
             </Link>),
             description: activity.description,
             steps: activity.tasks?.length ? activity.tasks.length : '-',
             date: activity.createdAt,
-            by: activity.createdBy,
+            by: activity.creatorName,
             actions: (
                 <div className="d-flex justify-content-center">
                     <Button onClick={() => onNewSession(activity.id)} className="btn btn-sm btn-primary me-2 ">Commencer</Button>
@@ -58,7 +61,7 @@ const ActivityList = () => {
     const onDelete = () => {
         console.log(deleteId);
         setToggleDelete(false);
-        del(`activities/${deleteId}`).then(() => {
+        http.del(`/api/activities/${deleteId}`).then(() => {
 
             setActivities(activities.filter((activity) => activity.id !== deleteId));
         })

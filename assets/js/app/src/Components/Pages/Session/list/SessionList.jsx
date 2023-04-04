@@ -5,6 +5,7 @@ import { Button } from 'reactstrap';
 import { Btn, H4 } from '../../../../AbstractElements';
 import { get, del, post } from '../../../../_helper/utils.js';
 import { useNavigate } from 'react-router';
+import { useHttp } from '../../../../_helper/http/useHttp';
 // import { dummytabledata, tableColumns } from '../../../../Data/Table/Defaultdata';
 
 const SessionList = () => {
@@ -12,6 +13,7 @@ const SessionList = () => {
     const [toggleDelete, setToggleDelete] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
     const history = useNavigate();
+    const http = useHttp();
 
     // const [data, setData] = useState(dummytabledata);
 
@@ -23,14 +25,14 @@ const SessionList = () => {
     const [activities, setActivities] = useState([]);
 
     useEffect(() => {
-        get('sessions').then((data) => {
+        http.get('/api/sessions').then((data) => {
         console.log(data);
-        setActivities(data['hydra:member']);
+        setActivities(data);
         });
     }, []);
 
     const onStartSession = (sessionId) => {
-        post(`app/session/${sessionId}/start`).then((data) => {
+        http.post(`api/session/${sessionId}/start`).then((data) => {
             history(`/app/session/show/${sessionId}`);
             console.log(data);
         })

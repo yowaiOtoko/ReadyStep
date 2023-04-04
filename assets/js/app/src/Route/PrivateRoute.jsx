@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { X } from 'react-feather';
 import { Navigate, Outlet } from 'react-router-dom';
+import { useAuth } from '../Auth/AuthProvider';
 // import { authHeader, handleResponse } from '../Services/fack.backend';
 
 const PrivateRoute = () => {
-  const login = useState(JSON.parse(localStorage.getItem('login')))[0];
-  const [authenticated, setAuthenticated] = useState(false);
-  const jwt_token = JSON.parse(localStorage.getItem('token'));
+
+  const auth = useAuth();
 
 
 
@@ -18,9 +19,9 @@ const PrivateRoute = () => {
     // localStorage.setItem('login', login);
   }, []);
 
-  // return <Navigate exact to={'app/activity/list'} />;
 
-  return jwt_token ? <Outlet /> : <Navigate exact to={`/login`} />;
+
+  return auth.isLogged() ? <Outlet /> : <Navigate exact to={`/login`} />;
 };
 
 export default PrivateRoute;
