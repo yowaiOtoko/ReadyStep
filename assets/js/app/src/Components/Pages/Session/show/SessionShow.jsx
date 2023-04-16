@@ -14,7 +14,7 @@ const SessionShow = () => {
     const {id} = useParams();
 
     useEffect(() => {
-        get(`sessions/${id}`).then((data) => {
+        get(`api/sessions/${id}`).then((data) => {
             console.log(data);
             setSession(data);
             setIsLoading(false);

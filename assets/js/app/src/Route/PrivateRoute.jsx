@@ -6,7 +6,7 @@ import { useAuth } from '../Auth/AuthProvider';
 
 const PrivateRoute = () => {
 
-  const auth = useAuth();
+  const {isLogged} = useAuth();
 
 
 
@@ -20,8 +20,7 @@ const PrivateRoute = () => {
   }, []);
 
 
-
-  return auth.isLogged() ? <Outlet /> : <Navigate exact to={`/login`} />;
+  return isLogged ? <Outlet /> : <Navigate exact to={`/login`} />;
 };
 
 export default PrivateRoute;

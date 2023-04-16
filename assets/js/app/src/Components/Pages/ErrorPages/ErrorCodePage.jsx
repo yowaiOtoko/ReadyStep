@@ -7,9 +7,10 @@ import { H2, P } from '../../../AbstractElements';
 import CustomizerContext from '../../../_helper/Customizer';
 import { useAuth } from '../../../Auth/AuthProvider';
 
-const Error400 = () => {
+const ErrorCodePage = ({code}) => {
     const { layoutURL } = useContext(CustomizerContext);
-    const auth = useAuth();
+    const {isStudent, isLogged, studentHome, teacherHome} = useAuth();
+    const homePage = !isLogged ? 'home' : isStudent ? studentHome : teacherHome;
 
     return (
         <Fragment>
@@ -18,12 +19,12 @@ const Error400 = () => {
                     <Container>
                         <Media body className="img-100" src={sad} alt="" />
                         <div className="error-heading">
-                            <H2 attrH2={{ className: "headline font-info" }} >{"400"}</H2>
+                            <H2 attrH2={{ className: "headline font-info" }} >{code}</H2>
                         </div>
                         <Col md="8 offset-md-2">
                             <P attrPara={{ className: "sub-content" }}>{"The page you are attempting to reach is currently not available. This may be because the page does not exist or has been moved."}</P>
                         </Col>
-                        <Link to={`${process.env.PUBLIC_URL}/pages/sample-page/${layoutURL}`}><Button color="info-gradien" size='lg'>{BACK_TO_HOME_PAGE}</Button></Link>
+                        <Link to={`${homePage}`}><Button color="info-gradien" size='lg'>{BACK_TO_HOME_PAGE}</Button></Link>
                     </Container>
                 </div>
             </div>
@@ -31,4 +32,4 @@ const Error400 = () => {
     );
 };
 
-export default Error400;
+export default ErrorCodePage;

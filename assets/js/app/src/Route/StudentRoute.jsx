@@ -5,9 +5,9 @@ import { parseJwt } from '../_helper/utils';
 
 const StudentRoute = () => {
 
-  const auth = useAuth();
+  const {isStudent} = useAuth();
 
-  return auth.isStudent() ? <Outlet /> : <Navigate exact to={`/login`} />;
+  return isStudent ? <Outlet /> : <Navigate exact to={`/login`} />;
 };
 
 export default StudentRoute;

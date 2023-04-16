@@ -13,10 +13,13 @@ import { authRoutes } from './AuthRoutes';
 // import { connectAuthEmulator, getAuth, onAuthStateChanged } from "firebase/auth";
 import Login from '../Components/Pages/Auth/Login';
 import LearnRoute from './StudentRoute';
-import { routes } from './Routes';
 import { teachRoutes } from './teachRoutes';
 import TeachRoute from './TeachRoute';
 import { studentRoutes } from './studentRoutes';
+import { useAuth } from '../Auth/AuthProvider';
+import Error401 from '../Components/Pages/ErrorPages/ErrorPage401';
+import Error404 from '../Components/Pages/ErrorPages/ErrorPage404';
+import ErrorCodePage from '../Components/Pages/ErrorPages/ErrorCodePage';
 
 // setup fake backend
 const Routers = () => {
@@ -25,6 +28,7 @@ const Routers = () => {
   const jwt_token = localStorage.getItem('token');
   const defaultLayoutObj = classes.find((item) => Object.values(item).pop(1) === 'compact-wrapper');
   const layout = localStorage.getItem('layout') || Object.keys(defaultLayoutObj).pop();
+  const auth = useAuth();
 
 console.log(process.env.REACT_APP_FIREBASE_API_KEY)
 
@@ -51,6 +55,7 @@ console.log('router index')
 
   }, []);
 
+
   return (
     <BrowserRouter basename={'/'}>
 
@@ -60,6 +65,7 @@ console.log('router index')
             <Route path={'/'} element={<PrivateRoute />}>
 
               {/* <Route exact path={`/`} element={<Navigate to={`/app/activity/list`} />} /> */}
+
 
               <Route path={'/teach'} element={<TeachRoute />}>
                 <Route path={`*`} element={<LayoutRoutes routes={teachRoutes}/>} />
@@ -71,11 +77,15 @@ console.log('router index')
               {/* <Route path={`/*`} element={<LayoutRoutes routes={routes} />} /> */}
             </Route>
 
+            <Route path={'401'} element={<ErrorCodePage code={401} />}/>
+
             <Route path={`callback`} render={() => <Callback />} />
             <Route exact path={`login`} element={<Login />} />
             {authRoutes.map(({ path, Component }, i) => (
               <Route path={path} element={Component} key={i} />
             ))}
+
+            <Route path={`*`} element={<ErrorCodePage code={404} />} />
           </Routes>
         </Suspense>
       </>

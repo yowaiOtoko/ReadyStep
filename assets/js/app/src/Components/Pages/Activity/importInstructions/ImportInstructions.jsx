@@ -8,6 +8,7 @@ import { Editor } from "../../../Common/mdxEditor";
 import Preview from "./Preview";
 import TextSelector from "./TextSelector";
 import { useHttp } from "../../../../_helper/http/useHttp";
+import { useAuth } from "../../../../Auth/AuthProvider";
 
 const ImportInstructions = () => {
     let { id } = useParams();
@@ -15,6 +16,7 @@ const ImportInstructions = () => {
     const [activityText, setActivityText] = useState();
     const [nodes, setNodes] = useState({});
     const http = useHttp();
+    const {token, authConfig} = useAuth();
 
     useEffect(() => {
         http.get(`/api/activities/${id}`).then((data) => {
@@ -35,7 +37,7 @@ const ImportInstructions = () => {
     };
 
     const onSave = () => {
-        http.post(`/api/task-lists/${id}/save`, nodes).then((data) => {
+        http.post(`/api/task-lists/${id}/save?${authConfig.tokenParameterName}=${token}`, nodes).then((data) => {
             console.log(data);
         });
 
@@ -46,8 +48,8 @@ const ImportInstructions = () => {
         <Fragment>
             <Breadcrumbs
                 mainTitle="Importer un fichier"
-                title={<Link to={`/app/activity/show/${activity.id}`}>{activity.name}</Link>}
-                parent={<Link to={'/app/activity/list'}>Activités</Link>}
+                title={<Link to={`/teach/activity/show/${activity.id}`}>{activity.name}</Link>}
+                parent={<Link to={'/teach/activity/list'}>Activités</Link>}
             />
             <Container fluid={true}>
                 <Row>

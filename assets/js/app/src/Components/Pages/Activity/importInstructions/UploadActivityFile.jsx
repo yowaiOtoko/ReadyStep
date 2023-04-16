@@ -4,16 +4,18 @@ import Dropzone from 'react-dropzone-uploader';
 import { get } from '../../../../_helper/utils';
 import Highlightable from 'highlightable';
 import { useHttp } from '../../../../_helper/http/useHttp';
+import { useAuth } from '../../../../Auth/AuthProvider';
 
 const UploadActivityFile = ({activityId, onResponse}) => {
   const [ranges, setRanges] = useState([]);
   const http = useHttp();
+  const {token, authConfig} = useAuth();
 
   const getUploadParams = ({ file, meta }) => {
     console.log('getUploadParams');
     const body = new FormData()
     body.append('file', file)
-    return { url: `${http.getBaseUrl()}/api/task-lists/${activityId}/import?bearer=${http.getToken()}`, body }
+    return { url: `${http.getBaseUrl()}/api/task-lists/${activityId}/import?${authConfig.tokenParameterName}=${token}`, body }
   };
 
 

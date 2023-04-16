@@ -33,7 +33,7 @@ const SessionList = () => {
 
     const onStartSession = (sessionId) => {
         http.post(`api/session/${sessionId}/start`).then((data) => {
-            history(`/app/session/show/${sessionId}`);
+            history(`../session/show/${sessionId}`);
             console.log(data);
         })
 
@@ -42,7 +42,7 @@ const SessionList = () => {
     const getRow = (session) => {
         return  {
             name: (
-            <Link to={`/app/session/show/${session.id}`}>
+            <Link to={`../session/show/${session.id}`}>
                 {session.name}
             </Link>),
             description: session.description,

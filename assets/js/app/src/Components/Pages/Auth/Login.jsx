@@ -7,13 +7,19 @@ import LoginForm from './LoginForm';
 const Login = () => {
 
     console.log('login')
-    const {login } = useAuth();
+    const {login, isStudent, isTeacher, studentHome, teacherHome } = useAuth();
     const history = useNavigate();
 
     const onLogin = (email, password) => {
         login(email, password).then(response => {
             if(response.success){
-                history('/');
+                if(isTeacher){
+                  history(teacherHome);
+                }else if(isStudent){
+                    history(studentHome);
+                }else{
+                    history('/401');
+                }
             }
         })
     }

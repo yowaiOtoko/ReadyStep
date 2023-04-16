@@ -8,9 +8,6 @@ import SessionShow from '../Components/Pages/Session/show/SessionShow';
 
 export const studentRoutes = [
   { path: `home`, Component: <StudentDashboard /> },
-  { path: `/app/activity/new`, Component: <ActivityEdit /> },
-  { path: `/app/activity/show/:id`, Component: <ActivityDetail /> },
-  { path: `/app/activity/import/:id`, Component: <ImportInstructions /> },
-  { path: `/app/session/list`, Component: <Sessions/> },
-  { path: `/app/session/show/:id`, Component: <SessionShow/> },
+  { path: `session/list`, Component: <Sessions/> },
+  { path: `session/show/:id`, Component: <SessionShow/> },
 ];

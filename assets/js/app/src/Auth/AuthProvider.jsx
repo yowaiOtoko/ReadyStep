@@ -9,7 +9,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useLocalStorage(jwtConfig.tokenUserKeyName, {});
-  const [token, setToken] = useLocalStorage(jwtConfig.storageTokenKeyName, '');
+  const [token, setToken] = useLocalStorage(jwtConfig.storageTokenKeyName);
   const http = useHttp();
 
 
@@ -61,15 +61,19 @@ export const AuthProvider = ({ children }) => {
     )
   }
 
-  const isLogged = () => {
+  const isLogged = () =>
+  {
+    if(!token || !user){
+      return false
+    }
+
     const isExpired = Date.now() >= user.exp * 1000;
-    return !!user && !isExpired;
+    return !isExpired;
   }
 
   const isStudent = () => {
 
     const token = parseJwt(localStorage.getItem(jwtConfig.storageTokenKeyName));
-    console.log(parseJwt(token));
     const roles = token ? token.roles : [];
     return roles.includes('ROLE_STUDENT');
   }
@@ -87,9 +91,15 @@ export const AuthProvider = ({ children }) => {
       login,
       logout,
       register,
-      isLogged,
-      isStudent,
-      isTeacher
+      isLogged: isLogged(),
+      isStudent: isStudent(),
+      isTeacher: isTeacher(),
+      token,
+      authConfig: jwtConfig,
+      studentHome: '/student/home',
+      teacherHome: '/teach/home',
+      adminHome: '/admin/home',
+      loginPage: '/login',
     }),
     [user, token]
   );

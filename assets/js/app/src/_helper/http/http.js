@@ -1,6 +1,5 @@
 
-import jwt_decode from 'jwt-decode'
-import { parsePropertiesToDate } from '../utils'
+import { parseJwt, parsePropertiesToDate } from '../utils'
 import { jwtConfig } from '../auth/jwtConfig'
 
 
@@ -112,7 +111,7 @@ export class http {
   getTokenData() {
     try {
       const token = JSON.parse(localStorage.getItem(this.jwtConfig.storageTokenKeyName))
-      return jwt_decode(token)
+      return parseJwt(token)
 
     } catch (e) {}
 
@@ -125,12 +124,12 @@ export class http {
 
   setToken(value) {
     const token = value ? value : null
-    localStorage.setItem(this.jwtConfig.storageTokenKeyName, token)
+    //localStorage.setItem(this.jwtConfig.storageTokenKeyName, token)
   }
 
   setRefreshToken(value) {
     const token = value ? value : null
-    localStorage.setItem(this.jwtConfig.storageRefreshTokenKeyName, token)
+    // localStorage.setItem(this.jwtConfig.storageRefreshTokenKeyName, token)
   }
 
   login(...args) {

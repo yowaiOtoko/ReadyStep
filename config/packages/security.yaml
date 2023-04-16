@@ -26,9 +26,8 @@ security:
         api:
             pattern:   ^/api
             stateless: true
-            jwt: ~
-            custom_authenticators:
-                - App\Security\CustomJWTAuthenticator
+            jwt:
+                authenticator: app.custom_authenticator
 
         main:
             pattern:   ^/
@@ -41,7 +40,8 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/login, roles: PUBLIC_ACCESS }
-        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+        # - { path: ^/docs, roles: PUBLIC_ACCESS }
+        # - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:
     security:

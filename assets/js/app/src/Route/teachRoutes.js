@@ -6,6 +6,7 @@ import Sessions from '../Components/Pages/Session/list';
 import SessionShow from '../Components/Pages/Session/show/SessionShow';
 
 export const teachRoutes = [
+  { path: 'home', Component: <Activity /> },
   { path: `activity/list`, Component: <Activity /> },
   { path: `activity/new`, Component: <ActivityEdit /> },
   { path: `activity/show/:id`, Component: <ActivityDetail /> },

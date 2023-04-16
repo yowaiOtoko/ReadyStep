@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 // import { routes } from './Routes';
 import AppLayout from '../Layout/Layout';
+import Activity from '../Components/Pages/Activity';
 
 const LayoutRoutes = ({routes}) => {
 
