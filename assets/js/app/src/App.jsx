@@ -48,12 +48,12 @@ const App = () => (
                                         <GoogleChartProvider>
                                           <ChartjsProvider>
                                             <ChartistProvider>*/}
-                                            <AuthProvider>
+                                             <AuthProvider>
                                               <AnimationThemeProvider>
                                                 <Routers />
                                               </AnimationThemeProvider>
-                                            </AuthProvider>
-                                            {/* </ChartistProvider>
+                                           </AuthProvider>
+                                              {/*</ChartistProvider>
                                           </ChartjsProvider>
                                         </GoogleChartProvider>
                                       </ProjectProvider>

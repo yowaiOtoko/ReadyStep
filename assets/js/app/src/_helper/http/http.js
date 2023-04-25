@@ -56,7 +56,7 @@ export class http {
 
             return Promise.reject(error)
           }
-          localStorage.removeItem('userData')
+          localStorage.removeItem(this.jwtConfig.tokenUserKeyName)
           localStorage.removeItem(this.jwtConfig.storageTokenKeyName)
           localStorage.removeItem(this.jwtConfig.storageRefreshTokenKeyName)
           window.location = '/login'

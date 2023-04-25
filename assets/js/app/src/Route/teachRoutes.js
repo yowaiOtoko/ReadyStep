@@ -3,7 +3,7 @@ import ActivityEdit from '../Components/Pages/Activity/edit/ActivityEdit';
 import ImportInstructions from '../Components/Pages/Activity/importInstructions/ImportInstructions';
 import ActivityDetail from '../Components/Pages/Activity/show/ActivityDetail';
 import Sessions from '../Components/Pages/Session/list';
-import SessionShow from '../Components/Pages/Session/show/SessionShow';
+import SessionTeacherShow from '../Components/Pages/Session/show/SessionTeacherShow';
 
 export const teachRoutes = [
   { path: 'home', Component: <Activity /> },
@@ -12,5 +12,5 @@ export const teachRoutes = [
   { path: `activity/show/:id`, Component: <ActivityDetail /> },
   { path: `activity/import/:id`, Component: <ImportInstructions /> },
   { path: `session/list`, Component: <Sessions/> },
-  { path: `session/show/:id`, Component: <SessionShow/> },
+  { path: `session/show/:id`, Component: <SessionTeacherShow/> },
 ];

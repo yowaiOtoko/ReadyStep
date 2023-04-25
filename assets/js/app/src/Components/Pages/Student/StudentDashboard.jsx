@@ -7,13 +7,15 @@ import { Breadcrumbs, P } from "../../../AbstractElements";
 import { SampleCard } from "../../../Constant";
 import { get } from "../../../_helper/utils";
 import { SessionCard } from "../Session/show/components/SessionCard";
+import { useHttp } from "../../../_helper/http/useHttp";
 
 export const StudentDashboard = () => {
 
     const [sessions, setSessions] = useState([]);
+    const http = useHttp();
 
     useEffect(() => {
-        get(`sessions`, {dateProperties: ['createdAt', 'startedAt']}).then((data) => {
+        http.get(`api/sessions`, {dateProperties: ['createdAt', 'startedAt']}).then((data) => {
 
             setSessions(data)
         });
@@ -36,15 +38,15 @@ export const StudentDashboard = () => {
 
                                     <Col md="6">
                                         <div className="text-end">
-                                            <Link
+                                            {/* <Link
                                                 className="btn btn-primary"
                                                 style={{ color: "white" }}
                                                 to={`/teach/activity/new`}
                                             >
 
                                                 <PlusCircle />
-                                                <span style={{marginRight:"3"}}> Nouvelle activité</span>
-                                            </Link>
+                                                <span style={{marginRight:"3"}}> Sessions</span>
+                                            </Link> */}
                                         </div>
                                     </Col>
                                 </Row>

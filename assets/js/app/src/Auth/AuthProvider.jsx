@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 import { redirect } from "react-router-dom";
 
 import { useLocalStorage } from "./useLocalStorage";
@@ -13,33 +13,34 @@ export const AuthProvider = ({ children }) => {
   const http = useHttp();
 
 
+
   // call this function when you want to authenticate the user
-  const login = async ({email, password}) => {
+  const login = (email, password) => {
     return http.post('/login', {
       email,
       password
     }).then(
       (response) => {
+
         setUser(response.data.user)
         setToken(response.data.token)
-        return response;
+
+        return response.data.user;
       }
     ).catch(
       (error) => {
         console.log(error);
       }
-
     )
-
   };
 
-  // call this function to sign out logged in user
   const logout = () => {
     setUser(null);
+    setToken(null);
 
   };
 
-  const register = async ({firstName, lastName, email, password}) => {
+  const register = ({firstName, lastName, email, password}) => {
     return http.post('/signup', {
       firstName,
       lastName,
@@ -48,7 +49,6 @@ export const AuthProvider = ({ children }) => {
     }).then(
       (response) => {
         if(response.success){
-
           setUser(response.data.user)
           setToken(response.data.token)
         }
@@ -63,6 +63,7 @@ export const AuthProvider = ({ children }) => {
 
   const isLogged = () =>
   {
+    console.log(token,  user)
     if(!token || !user){
       return false
     }
@@ -73,37 +74,58 @@ export const AuthProvider = ({ children }) => {
 
   const isStudent = () => {
 
-    const token = parseJwt(localStorage.getItem(jwtConfig.storageTokenKeyName));
-    const roles = token ? token.roles : [];
+    const t = parseJwt(token);
+    const roles = t ? t.roles : [];
     return roles.includes('ROLE_STUDENT');
   }
 
   const isTeacher = () => {
 
-    const token = parseJwt(localStorage.getItem(jwtConfig.storageTokenKeyName));
-    const roles = token ? token.roles : [];
+    const t = parseJwt(token);
+    const roles = t ? t.roles : [];
+    console.log("roles.includes('ROLE_TEACHER')", roles.includes('ROLE_TEACHER'))
     return roles.includes('ROLE_TEACHER');
   }
 
-  const value = useMemo(
-    () => ({
-      user,
-      login,
-      logout,
-      register,
-      isLogged: isLogged(),
-      isStudent: isStudent(),
-      isTeacher: isTeacher(),
-      token,
-      authConfig: jwtConfig,
-      studentHome: '/student/home',
-      teacherHome: '/teach/home',
-      adminHome: '/admin/home',
-      loginPage: '/login',
-    }),
-    [user, token]
-  );
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+ console.log("PROVIDER", token)
+  const value =  {
+    user,
+    token,
+    login,
+    logout,
+    register,
+    isLogged: isLogged(),
+    isStudent: isStudent(),
+    isTeacher: isTeacher(),
+    authConfig: jwtConfig,
+    studentHome: '/learn/home',
+    teacherHome: '/teach/home',
+    adminHome: '/admin/home',
+    loginPage: '/login',
+  }
+
+  // const value = useMemo(
+  //   () => {
+  //     console.log("memo", token, user)
+
+  //     return {
+  //     user,
+  //     login,
+  //     logout,
+  //     register,
+  //     isLogged: isLogged(),
+  //     isStudent: isStudent(),
+  //     isTeacher: isTeacher(),
+  //     token,
+  //     authConfig: jwtConfig,
+  //     studentHome: '/student/home',
+  //     teacherHome: '/teach/home',
+  //     adminHome: '/admin/home',
+  //     loginPage: '/login',
+  //   }},
+  //   [user, token]
+  // );
+   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 
 
 }

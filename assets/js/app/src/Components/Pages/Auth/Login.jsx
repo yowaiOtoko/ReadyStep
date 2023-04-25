@@ -1,27 +1,16 @@
 import React, { Fragment } from 'react';
-import { useNavigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 import { Col, Container, Row } from 'reactstrap';
 import { useAuth } from '../../../Auth/AuthProvider';
 import LoginForm from './LoginForm';
 
-const Login = () => {
+const Login =  () => {
 
-    console.log('login')
-    const {login, isStudent, isTeacher, studentHome, teacherHome } = useAuth();
+    const {login, isStudent, isTeacher, studentHome, teacherHome, token } = useAuth();
     const history = useNavigate();
 
-    const onLogin = (email, password) => {
-        login(email, password).then(response => {
-            if(response.success){
-                if(isTeacher){
-                  history(teacherHome);
-                }else if(isStudent){
-                    history(studentHome);
-                }else{
-                    history('/401');
-                }
-            }
-        })
+    const onLogin = ({email, password}) => {
+        login(email, password)
     }
 
     return (
@@ -30,6 +19,9 @@ const Login = () => {
                 <Row>
                     <Col>
                         <LoginForm onLogin={onLogin}/>
+                        { isTeacher && <Navigate to={teacherHome}/>}
+                        { isStudent && <Navigate to={studentHome}/>}
+
                     </Col>
                 </Row>
             </Container>

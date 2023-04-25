@@ -7,7 +7,7 @@ import Loader from "../../../Common/Component/Loader";
 import Users from "./components/Users";
 
 
-const SessionShow = () => {
+const SessionTeacherShow = () => {
 
     const [session, setSession] = useState();
     const [isLoading, setIsLoading] = useState(true);
@@ -41,4 +41,4 @@ const SessionShow = () => {
     )
 }
 
-export default SessionShow;
+export default SessionTeacherShow;

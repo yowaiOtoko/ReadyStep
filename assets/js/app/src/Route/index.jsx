@@ -30,18 +30,6 @@ const Routers = () => {
   const layout = localStorage.getItem('layout') || Object.keys(defaultLayoutObj).pop();
   const auth = useAuth();
 
-console.log(process.env.REACT_APP_FIREBASE_API_KEY)
-
-// TODO: Replace the following with your app's Firebase project configuration
-// See: https://firebase.google.com/docs/web/learn-more#config-object
-// const firebaseConfig = {
-//   apiKey: process.env.REACT_APP_FIREBASE_API_KEY ,
-//   appId: process.env.REACT_APP_FIREBASE_APP_ID,
-//   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-// };
-
-// Initialize Firebase
-
 console.log('router index')
 
   useEffect(() => {

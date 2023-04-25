@@ -16,7 +16,7 @@ const UserHeader = () => {
   const authenticated = JSON.parse(localStorage.getItem('authenticated'));
   const auth0_profile = JSON.parse(localStorage.getItem('auth0_profile'));
 
-  const {user} = useAuth();
+  const {user, logout} = useAuth();
 
   useEffect(() => {
     setProfile(localStorage.getItem('profileURL') || man);
@@ -24,11 +24,7 @@ const UserHeader = () => {
   }, []);
 
   const Logout = () => {
-    localStorage.removeItem('profileURL');
-    localStorage.removeItem('token');
-    localStorage.removeItem('auth0_profile');
-    localStorage.removeItem('Name');
-    localStorage.setItem('authenticated', false);
+    logout();
     history(`${process.env.PUBLIC_URL}/login`);
   };
 
