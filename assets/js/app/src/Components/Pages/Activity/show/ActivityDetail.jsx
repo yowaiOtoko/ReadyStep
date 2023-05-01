@@ -6,6 +6,7 @@ import { get } from "../../../../_helper/utils";
 import { Task } from "./Task";
 import { TaskGroup } from "./TaskGroup";
 import { useHttp } from "../../../../_helper/http/useHttp";
+import { Accordion } from "react-bootstrap";
 
 const ActivityDetail = () => {
     let { id } = useParams();
@@ -55,9 +56,11 @@ const ActivityDetail = () => {
                                 </p>
                                 <Row>
                                     <Col sm='12'>
-                                        {activity.tasks.map((task, index) => (
-                                            task.label ? <TaskGroup key={index} task={task}/> : <Task key={index} task={task}/>
-                                        ))}
+                                        <Accordion defaultActiveKey={activity.tasks.map(t => t.id)} flush alwaysOpen>
+                                            {activity.tasks.map((task, index) => (
+                                                task.label ? <TaskGroup key={index} task={task}/> : <Task key={index} task={task}/>
+                                            ))}
+                                        </Accordion>
                                     </Col>
                                 </Row>
 

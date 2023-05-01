@@ -15,7 +15,7 @@ const Preview = ({ nodes }) => {
             case SectionTypes.TEXT:
                 return <pre style={{whiteSpace: "pre-wrap"}}>{node.content}</pre>;
             case SectionTypes.TASK:
-                return <Task task={node}/>
+                return <Task task={node} readOnly/>
             case SectionTypes.TITLE:
                 return <h5>{node.content.trim()}</h5>
             default:

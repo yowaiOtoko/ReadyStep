@@ -27,6 +27,7 @@
     "bootstrap-scss": "^5.1.1",
     "chart.js": "^3.7.1",
     "chartjs-plugin-datalabels": "^2.0.0",
+    "ckeditor5-custom-build": "file:./ckeditor5",
     "codemirror": "^6.0.0",
     "concurrently": "^7.1.0",
     "date-fns": "^2.29.3",

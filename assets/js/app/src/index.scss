@@ -99,6 +99,10 @@ textarea.task-description-edit  {
     -webkit-transition: all .5s ease-out; //for webkit, chrome or safari
 }
 
+.read-only .ck-content {
+    background-color: #ffffff !important;
+}
+
 .ck-content:focus {
     border-top: 3px solid cornflowerblue !important;
     //border: 4px solid #0266C8 !important;
