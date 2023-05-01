@@ -188,17 +188,32 @@ export class http {
 
   async put(url, data) {
 
-    const response = await fetch(`${host}/${url}`, {
-      method: 'PUT',
+    return this.axiosIns.put(url,data).then((response) => {
+
+      if(response.status >= 400) {
+        throw new Error(response.statusText);
+      }
+
+      return response.data;
+
+    })
+  }
+
+  async patch(url, data) {
+
+    return this.axiosIns.patch(url,data, {
       headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
+        'Content-type': 'application/merge-patch+json'
+      }
+    }).then((response) => {
 
-    const resData = await response.json();
+      if(response.status >= 400) {
+        throw new Error(response.statusText);
+      }
 
-    return resData;
+      return response.data;
+
+    })
   }
 
   async del(url) {

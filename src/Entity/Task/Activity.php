@@ -4,17 +4,28 @@ namespace App\Entity\Task;
 
 use App\Entity\User;
 use App\Entity\Task\Task;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Link;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Task\ActivityMedia;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'task_activity')]
 #[ApiResource(order: ['createdAt' => 'DESC'])]
+#[ApiResource(
+    uriTemplate: '/sessions/{sessionId}/activity',
+    uriVariables: [
+        'sessionId' => new Link(fromClass: Session::class, toProperty: 'sessions'),
+
+    ],
+    operations: [ new GetCollection() ]
+)]
 class Activity
 {
     #[ORM\Id]

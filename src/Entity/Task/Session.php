@@ -102,6 +102,12 @@ class Session
     }
 
     #[ApiProperty()]
+    public function getUserCount(): string
+    {
+        return $this->users->count();
+    }
+
+    #[ApiProperty()]
     public function getAuthor(): string
     {
         return $this->activity->getCreatedBy();

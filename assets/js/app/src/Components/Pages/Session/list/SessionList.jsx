@@ -3,7 +3,7 @@ import DataTable from 'react-data-table-component';
 import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import { Btn, H4 } from '../../../../AbstractElements';
-import { get, del, post } from '../../../../_helper/utils.js';
+import { get, del, post, formatDate } from '../../../../_helper/utils.js';
 import { useNavigate } from 'react-router';
 import { useHttp } from '../../../../_helper/http/useHttp';
 // import { dummytabledata, tableColumns } from '../../../../Data/Table/Defaultdata';
@@ -25,7 +25,7 @@ const SessionList = () => {
     const [activities, setActivities] = useState([]);
 
     useEffect(() => {
-        http.get('/api/sessions').then((data) => {
+        http.get('/api/sessions', {dateProperties: ['createAt']}).then((data) => {
         console.log(data);
         setActivities(data);
         });
@@ -46,14 +46,17 @@ const SessionList = () => {
                 {session.name}
             </Link>),
             description: session.description,
-            steps: session.tasks?.length ? session.tasks.length : '-',
-            date: session.createdAt,
+            students: session.userCount ? session.userCount : '-',
+            //format date
+
+            date: formatDate(session.createdAt),
             by: session.createdBy,
             actions: (
                 <div className="d-flex justify-content-center">
                     <Button onClick={() => onStartSession(session.id)} className="btn btn-sm btn-primary me-2 ">
-                        { session.isPaused ? 'Reprendre' : 'Commencer'}
+                        { session.isPaused ? 'Reprendre' : 'Rejoindre'}
                     </Button>
+                    <Button color="secondary" outline onClick={()=> { setDeleteId(session.id); setToggleDelete(true)}} className="btn btn-sm me-2">clôturer</Button>
                     <Button color="danger" outline onClick={()=> { setDeleteId(session.id); setToggleDelete(true)}} className="btn btn-sm">Supp</Button>
                 </div>
             ),
@@ -88,9 +91,9 @@ const SessionList = () => {
             center: false,
         },
         {
-            name: 'steps',
+            name: 'students',
             sortable: true,
-            selector: row => row['steps'],
+            selector: row => row['students'],
             center: false,
         },
         {
