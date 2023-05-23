@@ -32,7 +32,7 @@ const SessionList = () => {
     }, []);
 
     const onStartSession = (sessionId) => {
-        http.post(`api/session/${sessionId}/start`).then((data) => {
+        http.post(`/api/app/session/${sessionId}/start`).then((data) => {
             history(`../session/show/${sessionId}`);
             console.log(data);
         })

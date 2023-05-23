@@ -36,7 +36,7 @@ const ActivityEdit = () => {
 
             http.post('/api/activities', data).then(data => {
                 console.log(data)
-                history(`activity/list`);
+                history(`/teach/activity/list`);
             })
             console.log(data)
             //project.addNewProject(data);
@@ -61,22 +61,22 @@ const ActivityEdit = () => {
 
                             </CardHeader>
                             <CardBody>
-                            <Form className='theme-form' onSubmit={handleSubmit(AddProject)}>
-                                <ActivityTitleRow register={register} errors={errors} />
-                                <DescriptionRow register={register} errors={errors} />
+                                <Form className='theme-form' onSubmit={handleSubmit(AddProject)}>
+                                    <ActivityTitleRow register={register} errors={errors} />
+                                    <DescriptionRow register={register} errors={errors} />
 
-                                <UploadActivityFileRow register={register} errors={errors} />
-                                <Row>
-                                    <Col>
-                                    <div className='text-end'>
-                                        <Btn attrBtn={{ color: 'success', className: 'me-3' }}>{Add}</Btn>
-                                        <Link to={`${process.env.PUBLIC_URL}/app/project/project-list`}>
-                                        <Btn attrBtn={{ color: 'danger' }}>{Cancel}</Btn>
-                                        </Link>
-                                    </div>
-                                    </Col>
-                                </Row>
-                            </Form>
+                                    <UploadActivityFileRow register={register} errors={errors} />
+                                    <Row>
+                                        <Col>
+                                        <div className='text-end'>
+                                            <Btn attrBtn={{ color: 'success', className: 'me-3' }}>{Add}</Btn>
+                                            <Link to={`${process.env.PUBLIC_URL}/app/project/project-list`}>
+                                                <Btn attrBtn={{ color: 'danger' }}>{Cancel}</Btn>
+                                            </Link>
+                                        </div>
+                                        </Col>
+                                    </Row>
+                                </Form>
                             </CardBody>
                         </Card>
                     </Col>

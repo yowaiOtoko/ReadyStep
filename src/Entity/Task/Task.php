@@ -30,10 +30,8 @@ class Task
     private ?string $description = null;
 
     #[ORM\OneToMany(targetEntity: UserTask::class, mappedBy: 'task')]
+    #[ApiProperty(readableLink: true)]
     private Collection $userTasks;
-
-    #[ORM\ManyToOne(inversedBy: 'tasks')]
-    private ?Activity $activity = null;
 
     #[ORM\OneToMany(mappedBy: 'task', targetEntity: SessionTask::class, orphanRemoval: true)]
     private Collection $sessionTasks;
@@ -51,9 +49,13 @@ class Task
     #[ORM\OneToMany(mappedBy: 'task', targetEntity: SessionUserTask::class, orphanRemoval: true)]
     private Collection $sessionUserTasks;
 
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?TaskGroup $taskGroup = null;
+
     public function __construct()
     {
-        $this->userTasks = new ArrayCollection;
+        $this->userTasks = new ArrayCollection();
         $this->sessionTasks = new ArrayCollection();
         $this->tasks = new ArrayCollection();
         $this->sessionUserTasks = new ArrayCollection();
@@ -72,18 +74,6 @@ class Task
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getActivity(): ?Activity
-    {
-        return $this->activity;
-    }
-
-    public function setActivity(?Activity $activity): self
-    {
-        $this->activity = $activity;
 
         return $this;
     }
@@ -198,6 +188,36 @@ class Task
                 $sessionUserTask->setTask(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTaskGroup(): ?TaskGroup
+    {
+        return $this->taskGroup;
+    }
+
+    public function setTaskGroup(?TaskGroup $taskGroup): self
+    {
+        $this->taskGroup = $taskGroup;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of userTasks
+     */
+    public function getUserTasks(): Collection
+    {
+        return $this->userTasks;
+    }
+
+    /**
+     * Set the value of userTasks
+     */
+    public function setUserTasks(Collection $userTasks): self
+    {
+        $this->userTasks = $userTasks;
 
         return $this;
     }

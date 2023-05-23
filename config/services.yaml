@@ -32,3 +32,6 @@ services:
     app.custom_authenticator:
         class: App\Security\CustomJWTAuthenticator
         parent: lexik_jwt_authentication.security.jwt_authenticator
+
+    App\Utils\Api\ApiPlatformSerializer:
+        arguments: ['@api_platform.serializer']

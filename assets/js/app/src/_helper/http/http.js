@@ -175,7 +175,7 @@ export class http {
   async post(url, data, options, throwOnError = true) {
 
 
-    return this.axiosIns.post(url,data).then((response) => {
+    return this.axiosIns.post(url, data).then((response) => {
 
       if(throwOnError && response.status >= 400) {
         throw new Error(response.statusText);

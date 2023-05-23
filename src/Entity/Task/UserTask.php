@@ -1,13 +1,21 @@
 <?php
+
 namespace App\Entity\Task;
 
 use App\Entity\User;
 use App\Entity\Task\Task;
 use App\Entity\Task\Session;
+use ApiPlatform\Metadata\Get;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'task_user_task')]
+#[ApiResource(
+
+)]
 class UserTask
 {
     #[ORM\Id]
@@ -26,10 +34,12 @@ class UserTask
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'userTasks')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ApiProperty(readableLink: false)]
     private ?User $user = null;
 
     #[ORM\ManyToOne(targetEntity: Task::class, inversedBy: 'userTasks')]
     #[ORM\JoinColumn(name: 'task_id', referencedColumnName: 'id')]
+    #[ApiProperty(readableLink: true)]
     private ?Task $task = null;
 
     #[ORM\ManyToOne(inversedBy: 'userTasks', targetEntity: Session::class)]
@@ -38,12 +48,18 @@ class UserTask
 
     public function __construct()
     {
-        $createdAt = new \DateTimeImmutable;
+        $this->createdAt = new \DateTimeImmutable;
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    #[ApiProperty()]
+    public function getActivityId(): int
+    {
+        return $this->session->getActivity()->getId();
     }
 
     public function getCompleted(): ?bool

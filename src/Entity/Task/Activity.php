@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Task\Task;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Link;
+use App\Entity\Task\TaskGroup;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Task\ActivityMedia;
@@ -40,9 +41,9 @@ class Activity
     private ?string $description = null;
 
 
-    #[ORM\OneToMany(mappedBy: 'activity', targetEntity: Task::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'activity', targetEntity: TaskGroup::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ApiProperty(readableLink: true)]
-    private Collection $tasks;
+    private Collection $taskGroups;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -65,7 +66,7 @@ class Activity
 
     public function __construct()
     {
-        $this->tasks = new ArrayCollection();
+        $this->taskGroups = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->files = new ArrayCollection();
         $this->sessions = new ArrayCollection();
@@ -101,24 +102,24 @@ class Activity
     }
 
 
-    public function getTasks(): Collection
+    public function getTaskGroups(): Collection
     {
-        return $this->tasks;
+        return $this->taskGroups;
     }
 
-    public function addTask(Task $task): self
+    public function addTaskGroups(TaskGroup $task): self
     {
-        if (!$this->tasks->contains($task)) {
-            $this->tasks->add($task);
+        if (!$this->taskGroups->contains($task)) {
+            $this->taskGroups->add($task);
             $task->setActivity($this);
         }
 
         return $this;
     }
 
-    public function removeTask(Task $task): self
+    public function removeTaskGroups(TaskGroup $task): self
     {
-        if ($this->tasks->removeElement($task)) {
+        if ($this->taskGroups->removeElement($task)) {
             // set the owning side to null (unless already changed)
             if ($task->getActivity() === $this) {
                 $task->setActivity(null);

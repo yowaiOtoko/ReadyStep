@@ -38,15 +38,20 @@ class AuthController extends AbstractController
 
             $payload = json_decode($request->getContent(), false);
 
+            dump($payload);
+
             $signInResult = $auth->signInWithEmailAndPassword($payload->email, $payload->password);
+
 
             $user = $this->em->getRepository(User::class)->findOneBy(['email' => $payload->email]);
             if(!$user){
+                $firebaseUid = $auth->parseToken($signInResult->idToken())->claims()->get('user_id');
+
                 $user = (new User())
                     ->setEmail($payload->email)
-                    ->setFirstName($payload->firstName)
-                    ->setLastName($payload->lastName)
-                    ->setFirebaseUid($signInResult->idToken()->claims()->get('sub'))
+                    ->setFirstName($signInResult->data()['displayName'])
+                    ->setLastName('')
+                    ->setFirebaseUid($firebaseUid)
                 ;
                 $this->em->persist($user);
                 $this->em->flush();

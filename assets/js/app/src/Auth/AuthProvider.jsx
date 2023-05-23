@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = ({firstName, lastName, email, password}) => {
-    return http.post('/signup', {
+    return http.post('/api/signup', {
       firstName,
       lastName,
       email,
@@ -68,7 +68,8 @@ export const AuthProvider = ({ children }) => {
       return false
     }
 
-    const isExpired = Date.now() >= user.exp * 1000;
+    const isExpired = Date.now() >= parseJwt(token).exp * 1000;
+    console.log('isExpired', parseJwt(token).exp, Date.now())
     return !isExpired;
   }
 

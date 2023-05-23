@@ -23,11 +23,13 @@ import FaqProvider from './_helper/Faq/FaqProvider';
 import AnimationThemeProvider from './_helper/AnimationTheme/AnimationThemeProvider';
 import CustomizerProvider from './_helper/Customizer/CustomizerProvider';
 import { AuthProvider } from './Auth/AuthProvider';
+import SessionProvider from './Components/Pages/Student/SessionProvider';
 
 const App = () => (
   <div className='App'>
 
     <CustomizerProvider>
+      <SessionProvider>
       {/*<FaqProvider>
         <LearningProvider>
           <JobSearchProvider>
@@ -73,6 +75,7 @@ const App = () => (
           </JobSearchProvider>
         </LearningProvider>
       </FaqProvider>*/}
+      </SessionProvider>
     </CustomizerProvider>
   </div>
 );

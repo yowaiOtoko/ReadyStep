@@ -11,8 +11,9 @@ import { TaskEditActions } from "./TaskEditActions";
 import Editor from 'ckeditor5-custom-build/build/ckeditor';
 import useDebounce from "../../../../_helper/useDebounce";
 import { useHttp } from "../../../../_helper/http/useHttp";
+import { TaskShowActions } from "./TaskShowActions";
 
-export const Task = ({ task, readOnly }) => {
+export const Task = ({ task, readOnly, session }) => {
 
     const [description, setDescription] = useState(task.description);
     const debouncedValue = useDebounce(description, 1000)
@@ -77,15 +78,15 @@ export const Task = ({ task, readOnly }) => {
                     </Col>
                     <Col xs="3">
                             <Row>
-                                {readOnly ? <Button variant="outline-secondary">Terminé</Button> :  <TaskEditActions/>}
+                                {readOnly ? <TaskShowActions task={task} session={session}/> :  <TaskEditActions/>}
                             </Row>
                     </Col>
                 </Row>
 
             </Card.Body>
-            {task.tasks && task.tasks.map((task, index) => (
+            {/* {task.tasks && task.tasks.map((task, index) => (
                 <Task key={index} task={task} readOnly/>
-            ))}
+            ))} */}
         </Card>
     );
 };

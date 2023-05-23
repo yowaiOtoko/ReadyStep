@@ -6,7 +6,7 @@ import LoginForm from './LoginForm';
 
 const Login =  () => {
 
-    const {login, isStudent, isTeacher, studentHome, teacherHome, token } = useAuth();
+    const {login, isStudent, isTeacher, studentHome, teacherHome, token, isLogged } = useAuth();
     const history = useNavigate();
 
     const onLogin = ({email, password}) => {
@@ -19,8 +19,8 @@ const Login =  () => {
                 <Row>
                     <Col>
                         <LoginForm onLogin={onLogin}/>
-                        { isTeacher && <Navigate to={teacherHome}/>}
-                        { isStudent && <Navigate to={studentHome}/>}
+                        { isLogged && isTeacher && <Navigate to={teacherHome}/>}
+                        { isLogged && isStudent && <Navigate to={studentHome}/>}
 
                     </Col>
                 </Row>

@@ -4,6 +4,7 @@ namespace App\Controller\Task;
 
 use App\Entity\Task\Session;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\Task\SessionRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;

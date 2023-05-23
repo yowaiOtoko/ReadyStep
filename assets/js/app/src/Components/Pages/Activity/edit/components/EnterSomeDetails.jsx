@@ -9,7 +9,7 @@ const DescriptionRow = ({ register, errors }) => {
         <Col>
           <FormGroup>
             <Label>Description</Label>
-            <textarea className='form-control' name='description' rows='3' {...register('description', { required: true })} />
+            <textarea className='form-control' name='description' rows='3' {...register('description', { required: false })} />
             <span style={{ color: 'red' }}>{errors.description && 'Some Details is required'}</span>
           </FormGroup>
         </Col>

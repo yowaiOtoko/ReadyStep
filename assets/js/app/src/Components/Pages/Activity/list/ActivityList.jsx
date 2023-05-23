@@ -32,7 +32,7 @@ const ActivityList = () => {
     }, []);
 
     const onNewSession = (sessionId) => {
-        http.post(`/app/activity/${sessionId}/new-session`).then((data) => {
+        http.post(`/api/app/activity/${sessionId}/new-session`).then((data) => {
             console.log(data);
         })
 

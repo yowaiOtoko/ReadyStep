@@ -6,6 +6,7 @@ namespace App\Controller\Task;
 use App\Entity\Task\Task;
 use App\Utils\SectionType;
 use App\Entity\Task\Activity;
+use App\Entity\Task\TaskGroup;
 use App\Repository\Task\ActivityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +24,7 @@ class SaveActivityAction extends AbstractController
         $data = json_decode($request->getContent(), true);
 
         $activity = $activityRepos->find($request->get('id'));
-        $activity->getTasks()->clear();
+        $activity->getTaskGroups()->clear();
 
 
         $this->handleData($data, $activity);
@@ -39,43 +40,47 @@ class SaveActivityAction extends AbstractController
     private function handleData(array $data, Activity $activity): void
     {
 
-        $task = null;
+        $taskGroup = null;
         foreach($data as $section){
             switch($section['type']){
                 case SectionType::Title->value:
-                    $task = $this->createTitle($section);
-                    $activity->addTask($task);
+                    $taskGroup = $this->createTitle($section);
+                    $activity->addTaskGroups($taskGroup);
                     break;
                 case SectionType::Text->value:
-                    $this->createText($section, $task);
+                    $this->createText($section, $taskGroup);
                     break;
                 case SectionType::Task->value:
-                    $this->createTask($section, $task);
+                    $this->createTask($section, $taskGroup);
                     break;
             }
         }
 
     }
 
-    private function createTask(array $data, Task &$task): void
+    private function createTask(array $data, TaskGroup &$taskGroup): void
     {
         $subTask = (new Task())
             ->setDescription($data['content'])
         ;
 
-        $task->addTask($subTask);
+        $taskGroup->addTask($subTask);
 
     }
 
-    private function createText(array $data, Task &$task): void
+    private function createText(array $data, TaskGroup &$taskGroup): void
     {
-        $task->setDescription($data['content']);
+        $subTask = (new Task())
+            ->setDescription($data['content'])
+        ;
+
+        $taskGroup->addTask($subTask);
 
     }
 
-    private function createTitle(array $data): Task
+    private function createTitle(array $data): TaskGroup
     {
-        $task = (new Task())
+        $task = (new TaskGroup())
             ->setLabel(trim($data['content']))
         ;
         return $task;

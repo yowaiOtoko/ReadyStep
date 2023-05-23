@@ -4,6 +4,7 @@ namespace App\Controller\Task;
 
 use App\Entity\User;
 use App\Entity\Task\Session;
+use App\Entity\Task\UserTask;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Routing\Annotation\Route;
@@ -40,7 +41,18 @@ class JoinSessionAction extends AbstractController
             throw new BadRequestException('User not found');
         }
 
-        $session->addUser($user);
+        if(!$session->getUsers()->contains($user)){
+            $session->addUser($user);
+            foreach($session->getActivity()->getTaskGroups() as $group){
+                foreach($group->getTasks() as $task){
+                    $userTask = new UserTask();
+                    $userTask->setTask($task)
+                        ->setUser($user)
+                        ->setSession($session);
+                    $em->persist($userTask);
+                }
+            }
+        }
 
 
         $em->persist($session);

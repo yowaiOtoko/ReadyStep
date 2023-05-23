@@ -56,10 +56,12 @@ const ActivityDetail = () => {
                                 </p>
                                 <Row>
                                     <Col sm='12'>
-                                        <Accordion defaultActiveKey={activity.tasks.map(t => t.id)} flush alwaysOpen>
-                                            {activity.tasks.map((task, index) => (
-                                                task.label ? <TaskGroup key={index} task={task}/> : <Task key={index} task={task}/>
-                                            ))}
+                                        <Accordion defaultActiveKey={activity.taskGroups.map(t => t.id)} flush alwaysOpen>
+                                            <>
+                                                {activity.taskGroups.map((group, index) => (
+                                                    <TaskGroup key={index} taskGroup={group}/>
+                                                ))}
+                                            </>
                                         </Accordion>
                                     </Col>
                                 </Row>
